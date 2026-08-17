@@ -49,6 +49,42 @@ Keep this visible while scoring. Scores 2 and 4 sit between the anchors.
 **Weighted total:** for each criterion, `score × weight ÷ 5`. Sum the five. Result is out of 100.
 Example: traction 4 → `4 × 30 ÷ 5 = 24`.
 
+**Confidence levels:**
+
+| Level | Meaning | Effect on the score |
+|-------|---------|---------------------|
+| **H** | Direct explicit evidence — named customers, unit counts, dates | None, score freely 1–5 |
+| **M** | Indirect or partial evidence — one case study, job postings, vague claims | None, but note the weakness |
+| **L** | Almost nothing found | **Score capped at 2** |
+
+---
+
+## Worked example
+
+**Deliberately using Flyability, which is NOT one of the five below.** Showing a filled-in score
+for a calibration company would anchor the scoring and defeat the purpose of the exercise.
+
+The numbers here are illustrative reasoning, not researched fact. What matters is the shape of
+the thinking, not the values.
+
+| Criterion | Score /5 | Confidence | One-line justification | Weighted |
+|-----------|----------|------------|------------------------|----------|
+| Field traction (30) | 4 | M | Elios drones sold internationally through distributors, several published case studies naming industrial sites. No public unit count anywhere, so a 5 is not supported. | 24 |
+| Team / execution (25) | 4 | H | EPFL spin-off, three product generations shipped (Elios 1 → 2 → 3). Pedigree alone caps at 3, but shipping three generations pushes above it. No prior at-scale hardware exit, so not a 5. | 20 |
+| Technology (20) | 4 | M | Collision-tolerant cage plus GPS-denied navigation in confined spaces is genuinely hard and took years of field iteration. Whether the advantage compounds is unclear, so not a 5. | 16 |
+| Market (15) | 4 | H | Industrial inspection has an existing budget line and regulatory inspection mandates. Crowded, though. | 12 |
+| Timing (10) | 3 | H | Rides the general wave. No specific dated unlock identified. Default score. | 6 |
+| **Total** | | | | **78/100** |
+
+Three things this example demonstrates:
+
+1. **Justifications explain the ceiling, not just the score.** "No public unit count, so a 5 is not
+   supported" is more useful than "good traction". Write why the score is not higher.
+2. **Anchors get arbitrated, not applied mechanically.** The team score sits between the 3 anchor
+   (pedigree) and the 5 anchor (shipped at scale before). Three product generations justified a 4.
+   Write that reasoning down — it is what gets discussed later.
+3. **Timing lands on 3 by default,** as designed. Resist the urge to inflate it.
+
 ---
 
 ## 1. ANYbotics — CH, Zurich — legged industrial inspection
