@@ -207,6 +207,27 @@ Absence of evidence is recorded as absence, not averaged away into a middling sc
 low-confidence flag is listed in the final report so a reader can see exactly which parts of
 the ranking rest on thin data.
 
+### 4c. Sourcing the traction criterion
+
+There is a real tension in this design, and it is better stated than discovered: field traction
+carries the highest weight (30) and is the hardest evidence to obtain publicly. Industrial
+buyers rarely disclose deployment volumes. Left alone, the most important criterion would carry
+the most low-confidence flags.
+
+The weight is not lowered — the argument for it holds. Instead, step 1 searches for traction
+evidence deliberately and beyond the company's own marketing:
+
+| Source | What it reveals |
+|--------|-----------------|
+| Customer-side press releases | The buyer announcing a rollout is stronger evidence than the vendor announcing a win |
+| Published case studies | Usually name a site and sometimes a unit count |
+| Job postings | A company hiring ten field deployment engineers has deployments. Hiring only researchers does not. |
+| Trade and industry press | Covers installations that never reach the startup press |
+| Regulatory and tender records | Public-sector deployments leave a paper trail |
+
+Job postings are an **indirect indicator** and are labelled as such in the extracted data. They
+support a score, they never establish one on their own.
+
 ---
 
 ## 5. Calibration set
