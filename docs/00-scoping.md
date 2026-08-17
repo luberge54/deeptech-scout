@@ -129,14 +129,83 @@ pretending it separates companies within it.
 
 ## 4. Scoring scale
 
-A 1–5 scale with written anchors, so two different runs produce comparable scores.
-Without anchors the model drifts and the scores mean nothing.
+A 1–5 scale with written anchors for every criterion, so that two runs of the pipeline produce
+comparable scores. Without anchors the model drifts between runs and the ranking means nothing.
+
+Scores 2 and 4 are intermediate positions between the anchors below.
+
+### Field traction — weight 30
 
 | Score | Anchor |
 |-------|--------|
-| 1 | TBD |
-| 3 | TBD |
-| 5 | TBD |
+| 1 | Demos, pilots and letters of intent only. No customer paying for a deployment, or deployments only at investor and partner sites. |
+| 3 | Paying deployments at roughly 3–10 customers, still sold project by project, each installation substantially custom. |
+| 5 | Repeat orders from several industrial customers, tens of units in routine daily service, and at least one customer that has moved past an initial pilot into a fleet. |
+
+> The discriminator is the **pilot-to-fleet transition**, not the number of pilots. Robotics is
+> full of companies with fifty pilots and no second order — that is "pilot purgatory", and it
+> scores a 2, not a 4. A single customer that scaled from three units to thirty is worth more
+> evidence than twenty logos on a website.
+
+### Team / execution — weight 25
+
+| Score | Anchor |
+|-------|--------|
+| 1 | First-time founders with no record of shipping hardware, no visible iteration, flat or shrinking team. |
+| 3 | Credible technical founders with a strong research pedigree, one product generation shipped, steady hiring. |
+| 5 | Founders who have shipped hardware at scale before, or two-plus product generations shipped at this company with visibly shortening cycles, and the pull to hire senior robotics people away from big tech. |
+
+> **An ETH or EPFL pedigree caps at 3 in this panel.** Nearly every Swiss company on the list
+> has one, so it is table stakes, not a differentiator. Anything that everyone shares cannot
+> separate anyone — the same logic that caps the timing criterion at 10.
+
+### Technology / product — weight 20
+
+| Score | Anchor |
+|-------|--------|
+| 1 | The capability is demonstrated in published research by others and the demo could be reproduced with off-the-shelf components. |
+| 3 | Real engineering depth — hard integration work, reliability in the field — but the underlying approach is broadly available to competitors. |
+| 5 | An advantage that compounds: a proprietary real-world data flywheel, a hardware component competitors cannot buy, or a certification that takes years to replicate. |
+
+> A 5 requires something that **gets stronger with use**. A clever architecture does not qualify;
+> everyone reads the same papers. This is the criterion where the weighting argument from
+> section 3b cashes out.
+
+### Market — weight 15
+
+| Score | Anchor |
+|-------|--------|
+| 1 | Narrow niche with few buyers, or a segment where no budget line exists for this category of spend. |
+| 3 | Genuinely sizeable segment, but crowded, or with procurement cycles long enough to starve a startup. |
+| 5 | Large segment with an urgent and already-budgeted pain — labour shortage, regulatory inspection mandate — where the buyer purchases in this category today. |
+
+> Judge the **existing budget line**, not the headline market size. A TAM is easy to inflate and
+> nobody can check it. A buyer who already has a line item for inspection is a buyer who can sign.
+
+### Timing — weight 10
+
+| Score | Anchor |
+|-------|--------|
+| 1 | Could have been built five years ago and was not, with no external change explaining why now. |
+| 3 | Rides the general Physical AI wave — the same "why now" as every other company in the panel. **This is the default score here.** |
+| 5 | A specific, dateable unlock the company is positioned for: a regulation entering into force, a component crossing a price threshold, a customer-side mandate. |
+
+> Because the generic wave scores a 3 for everyone, only a *specific* unlock earns a 5. This is
+> what keeps a low-weight criterion from quietly inflating every total.
+
+### 4b. Handling missing evidence
+
+The pipeline will not find complete data for all 26 companies. Younger and less publicised
+companies will have thinner public footprints, and that must not be silently rewarded or
+punished by guesswork.
+
+**Rule: where evidence for a criterion is absent, the score is capped at 2 and flagged as low
+confidence. The model must never infer a score from what is plausible for a company of that
+type.**
+
+Absence of evidence is recorded as absence, not averaged away into a middling score. Every
+low-confidence flag is listed in the final report so a reader can see exactly which parts of
+the ranking rest on thin data.
 
 ---
 
