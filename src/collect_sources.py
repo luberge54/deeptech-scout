@@ -46,6 +46,9 @@ MAX_CONTINUATIONS = 5
 
 OUTPUT_DIR = Path("data/raw")
 
+# The five calibration companies from docs/00-scoping.md section 5, each chosen
+# to stress a different failure mode. The remaining 21 are added when the
+# pipeline is extended past calibration.
 COMPANIES = {
     "anybotics": {
         "name": "ANYbotics",
@@ -54,9 +57,38 @@ COMPANIES = {
         "website": "anybotics.com",
         "description": "legged robots for industrial inspection",
     },
+    "humanoid": {
+        "name": "Humanoid",
+        "country": "United Kingdom",
+        "city": "London",
+        "website": "thehumanoid.ai",
+        "description": "humanoid robots for industrial and manufacturing work",
+    },
+    "verity": {
+        "name": "Verity",
+        "country": "Switzerland",
+        "city": "Zurich",
+        "website": "verity.net",
+        "description": "autonomous indoor drones for warehouse inventory tracking",
+    },
+    "mimic-robotics": {
+        "name": "mimic robotics",
+        "country": "Switzerland",
+        "city": "Zurich",
+        "website": "mimicrobotics.com",
+        "description": "dexterous robotic manipulation using imitation learning",
+    },
+    "gravis-robotics": {
+        "name": "Gravis Robotics",
+        "country": "Switzerland",
+        "city": "Zurich",
+        "website": "gravisrobotics.com",
+        "description": "autonomy retrofit kits for heavy construction machinery",
+    },
 }
 
 DEFAULT_COMPANY_SLUG = "anybotics"
+RUN_ALL_KEYWORD = "all"
 
 RESEARCH_PROMPT = """You are gathering public evidence about a company for a market map of \
 Physical AI companies in Switzerland and Europe.
@@ -286,33 +318,68 @@ def save_record(record: dict, slug: str) -> Path:
     return path
 
 
-def main() -> None:
-    slug = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_COMPANY_SLUG
-    company = select_company(slug)
+def collect_one(client: anthropic.Anthropic, slug: str) -> dict:
+    """Collect one company and report what the run produced and cost."""
+    company = COMPANIES[slug]
+    print(f"\n[{slug}] collecting sources for {company['name']}")
 
-    print(f"Step 1: collecting sources for {company['name']}")
-    print(f"    model: {COLLECTION_MODEL}, search budget: {MAX_SEARCHES}\n")
-
-    client = anthropic.Anthropic(api_key=read_api_key())
     response = run_research(client, company)
     record = build_record(company, slug, response)
     path = save_record(record, slug)
 
     stats = record["run_stats"]
-    print("\nDone.")
-    print(f"    searches run:   {stats['searches_run']} of {stats['search_budget']} allowed")
-    print(f"    unique sources: {len(record['sources'])}")
-    print(f"    tokens:         {stats['input_tokens']} in / {stats['output_tokens']} out")
-    print(f"    est. cost:      ${stats['estimated_cost_usd']:.2f}")
-    print(f"    findings:       {len(record['findings'])} characters")
-    print(f"    saved to:       {path}")
+    print(f"    searches:  {stats['searches_run']} of {stats['search_budget']} allowed")
+    print(f"    sources:   {len(record['sources'])} unique URLs")
+    print(f"    tokens:    {stats['input_tokens']} in / {stats['output_tokens']} out")
+    print(f"    cost:      ${stats['estimated_cost_usd']:.2f}")
+    print(f"    saved to:  {path}")
 
     if stats["searches_run"] == stats["search_budget"]:
         print(
-            "\n    NOTE: the search budget was fully consumed, so the research may\n"
-            "    have been cut short. Check the 'Contradictions and gaps' section\n"
-            "    for gaps the model attributes to the cap rather than to absence."
+            "    NOTE: search budget fully consumed - some gaps in this report may\n"
+            "          be truncation rather than genuine absence of evidence."
         )
+
+    return record
+
+
+def resolve_targets(argument: str) -> list[str]:
+    """Turn the command-line argument into the list of slugs to collect.
+
+    An explicit slug always runs, so a company can be deliberately re-collected.
+    The "all" keyword skips companies already on disk, so an interrupted batch
+    can be resumed without paying twice for the same work.
+    """
+    if argument != RUN_ALL_KEYWORD:
+        select_company(argument)
+        return [argument]
+
+    pending = [slug for slug in COMPANIES if not (OUTPUT_DIR / f"{slug}.json").exists()]
+    skipped = [slug for slug in COMPANIES if slug not in pending]
+
+    if skipped:
+        print(f"Already collected, skipping: {', '.join(skipped)}")
+        print("To re-collect one of these, pass its slug explicitly.\n")
+
+    return pending
+
+
+def main() -> None:
+    argument = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_COMPANY_SLUG
+    targets = resolve_targets(argument)
+
+    if not targets:
+        sys.exit("Nothing to do - every known company has already been collected.")
+
+    print(f"Step 1: source collection for {len(targets)} company(ies)")
+    print(f"    model: {COLLECTION_MODEL}, search budget: {MAX_SEARCHES} per company")
+
+    client = anthropic.Anthropic(api_key=read_api_key())
+    total_cost = sum(
+        collect_one(client, slug)["run_stats"]["estimated_cost_usd"] for slug in targets
+    )
+
+    print(f"\nDone. {len(targets)} collected, estimated total cost ${total_cost:.2f}")
 
 
 if __name__ == "__main__":
