@@ -126,20 +126,43 @@ def load_report(slug: str) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def budget_was_exhausted(stats: dict) -> bool:
+    """True when step 1 spent its whole search budget on this report.
+
+    Both figures must be present. Comparing two missing keys yields None == None,
+    which would silently mark every report without run_stats as exhausted and tilt
+    the extraction towards not_searched for no reason.
+    """
+    searches_run = stats.get("searches_run")
+    return searches_run is not None and searches_run == stats.get("search_budget")
+
+
+def build_prompt(report: dict) -> str:
+    """Assemble the extraction prompt for one step 1 report.
+
+    Split out from the API call so the budget hint can be tested without spending
+    anything.
+    """
+    return EXTRACTION_PROMPT.format(
+        name=report["company"]["name"],
+        findings=report["findings"],
+        budget_hint=(
+            BUDGET_EXHAUSTED_HINT
+            if budget_was_exhausted(report.get("run_stats", {}))
+            else ""
+        ),
+    )
+
+
 def extract_one(client: anthropic.Anthropic, slug: str) -> dict:
     """Run the extraction for one company and write the structured record."""
     report = load_report(slug)
     company = report["company"]
-    stats = report.get("run_stats", {})
-    budget_exhausted = stats.get("searches_run") == stats.get("search_budget")
+    budget_exhausted = budget_was_exhausted(report.get("run_stats", {}))
 
     print(f"\n[{slug}] extracting {company['name']}")
 
-    prompt = EXTRACTION_PROMPT.format(
-        name=company["name"],
-        findings=report["findings"],
-        budget_hint=BUDGET_EXHAUSTED_HINT if budget_exhausted else "",
-    )
+    prompt = build_prompt(report)
 
     try:
         with client.messages.stream(
