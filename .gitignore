@@ -10,6 +10,7 @@ __pycache__/
 # it is globbed, so nothing that is not a company report may live there.
 data/raw/
 data/output/
+data/scored/
 
 # data/archive is deliberately NOT ignored: it holds evidence kept on purpose,
 # such as the discarded 12-search ANYbotics run behind section 6 of the scoping
