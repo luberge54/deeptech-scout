@@ -88,10 +88,13 @@ def load_companies() -> list[dict]:
 def total_pipeline_cost() -> float:
     """What the whole run cost, summed from the files each step wrote."""
     total = 0.0
+    # The thesis record lives in the scored directory but does not carry the
+    # .scored.json suffix, so it needs naming separately or step 5 goes uncounted.
     patterns = [
         (COLLECTED_DIR, "*.json"),
         (EXTRACTED_DIR, "*.extracted.json"),
         (SCORED_DIR, f"*{SCORED_SUFFIX}"),
+        (SCORED_DIR, "thesis.json"),
     ]
 
     for directory, pattern in patterns:
