@@ -228,6 +228,26 @@ evidence deliberately and beyond the company's own marketing:
 Job postings are an **indirect indicator** and are labelled as such in the extracted data. They
 support a score, they never establish one on their own.
 
+### 4d. Model allocation across the pipeline
+
+Two models, assigned per step rather than one model for the whole pipeline. The principle:
+**spend capability where judgment happens, not uniformly.**
+
+| Step | Model | Reasoning |
+|------|-------|-----------|
+| 1. Source collection | `claude-sonnet-5` | High input volume (search results), low judgment. Finding and returning pages is not where model capability separates. |
+| 2. Structured extraction | `claude-sonnet-5` | Reading a page and filling a schema field with its source URL. Mechanical once the schema is fixed. |
+| 3. Weighted scoring | `claude-opus-5` | The only step that is pure judgment: arbitrating between the 1/3/5 anchors, applying the missing-evidence cap, and writing a justification that survives challenge. This is the step the project is actually about. |
+| 4. Report generation | `claude-sonnet-5` | Formatting already-decided content. |
+| 5. Thesis and executive summary | `claude-opus-5` | Synthesis across 26 scored companies — pattern-finding, not transcription. |
+
+Cost at August 2026 list prices: Opus is 2.5× Sonnet per token on both input and output. Running
+the whole pipeline on Opus would roughly double the project cost for a quality gain confined to
+steps 3 and 5.
+
+**Consequence to respect on any rerun:** step 3 stays on Opus. A scoring pass run on a different
+model is not comparable to the existing one, and the calibration in §5 would have to be redone.
+
 ---
 
 ## 5. Calibration set
@@ -237,9 +257,33 @@ and the model's output is measured and discussed in the final report.
 
 This is the section that makes the project credible. Do not skip it.
 
+Hand-scoring completed 2026-08-18, blind, before any pipeline code was written. Full
+per-criterion scores, confidence levels, and justifications are in
+[`calibration-worksheet.md`](calibration-worksheet.md).
+
 | Company | My score | Model score | Gap | Who was right, and why |
 |---------|----------|-------------|-----|------------------------|
-| TBD | | | | |
+| ANYbotics | 93/100 | | | |
+| Verity | 92/100 | | | |
+| Gravis Robotics | 85/100 | | | |
+| Humanoid | 77/100 | | | |
+| mimic robotics | 60/100 | | | |
+
+Three observations from the hand-scoring pass, recorded before seeing any model output:
+
+- **The Humanoid test no longer isolates what it was designed to test.** It was chosen to check
+  whether the model conflates funding with traction — traction was expected to score low. It
+  scored 4, on the strength of a dated, binding Schaeffler contract. The reasoning holds, but if
+  the model also scores it high, the two possible causes (reading the contract vs. being swayed
+  by headline numbers) become indistinguishable.
+- **Gravis Robotics no longer tests the coverage floor.** It was chosen for near-zero public
+  coverage. A $200M SoftBank round announced 2026-08-17 changed that overnight; it scored 85 with
+  HIGH confidence on four of five criteria. **mimic robotics is now the only functioning
+  missing-evidence test** — it produced the single LOW-confidence flag in the set.
+- **Market does not discriminate.** Four of five companies scored 5. That is the same failure the
+  weighting section identifies for Timing, and it suggests the Market "5" anchor is too easy to
+  reach. Weight is only 15, so the effect on the ranking is bounded — but it is a real finding
+  about the criteria, not about the companies.
 
 ---
 
