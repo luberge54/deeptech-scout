@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from schema import (  # noqa: E402
     Confidence,
+    DirectEvidenceKind,
     CriterionEvidence,
     EvidenceGrade,
     EvidenceItem,
@@ -38,12 +39,14 @@ def make_item(
     source_type: SourceType,
     grade: EvidenceGrade = EvidenceGrade.DIRECT,
     source_url: str = "https://example.com/a",
+    direct_because: DirectEvidenceKind = DirectEvidenceKind.NAMED_CUSTOMER,
 ) -> EvidenceItem:
     return EvidenceItem(
         claim="A robot was deployed at a named site.",
         source_url=source_url,
         source_type=source_type,
         evidence_grade=grade,
+        direct_because=direct_because,
         published_date=None,
         attributed_to=None,
     )
@@ -75,9 +78,33 @@ def test_claims_without_a_source_url_are_dropped() -> None:
     assert cleaned[0].source_url == "https://example.com/real"
 
 
-def test_direct_evidence_from_an_independent_source_gives_high() -> None:
-    items = [make_item(SourceType.CUSTOMER_SIDE, EvidenceGrade.DIRECT)]
+def test_two_independent_direct_sources_give_high() -> None:
+    # Arrange - HIGH means corroborated: more than one party said so
+    items = [
+        make_item(SourceType.CUSTOMER_SIDE, EvidenceGrade.DIRECT),
+        make_item(SourceType.TRADE_PRESS, EvidenceGrade.DIRECT),
+    ]
+
+    # Act / Assert
     assert derive_confidence(EvidenceStatus.FOUND, items) is Confidence.HIGH
+
+
+def test_a_single_independent_direct_source_only_gives_medium() -> None:
+    # Arrange - the mimic robotics case: field traction read HIGH on one item, and
+    # that item was a product announcement filed under traction. One source cannot
+    # be checked against anything.
+    items = [make_item(SourceType.CUSTOMER_SIDE, EvidenceGrade.DIRECT)]
+
+    # Act / Assert
+    assert derive_confidence(EvidenceStatus.FOUND, items) is Confidence.MEDIUM
+
+
+def test_many_weak_sources_do_not_add_up_to_high() -> None:
+    # Arrange - six indirect items are still nobody confirming anything directly
+    items = [make_item(SourceType.TRADE_PRESS, EvidenceGrade.INDIRECT) for _ in range(6)]
+
+    # Act / Assert - counting corroboration must not become counting volume
+    assert derive_confidence(EvidenceStatus.FOUND, items) is Confidence.MEDIUM
 
 
 def test_vendor_sourced_direct_evidence_only_gives_medium() -> None:
@@ -194,6 +221,81 @@ def test_canonical_url_leaves_a_meaningful_difference_alone() -> None:
     # Arrange / Act / Assert - the query string can select the page, so it is kept
     assert canonical_url("https://a.com/p?id=1") != canonical_url("https://a.com/p?id=2")
     assert canonical_url("https://A.com/p/") == canonical_url("https://a.com/p")
+
+
+def test_a_direct_item_naming_nothing_concrete_is_downgraded() -> None:
+    # Arrange - the mimic case: a product announcement graded direct, with no
+    # customer, site, unit count or agreement anywhere in it
+    items = [
+        make_item(
+            SourceType.TRADE_PRESS,
+            EvidenceGrade.DIRECT,
+            direct_because=DirectEvidenceKind.NONE,
+        )
+    ]
+
+    # Act
+    cleaned = normalise_evidence(items, KNOWN_URLS)
+
+    # Assert - the claim is kept, the grade it did not earn is not
+    assert len(cleaned) == 1
+    assert cleaned[0].evidence_grade is EvidenceGrade.INDIRECT
+
+
+def test_a_downgraded_item_can_no_longer_carry_high_confidence() -> None:
+    # Arrange - two independent trade-press items, neither naming anything concrete.
+    # Under the old rules this reached HIGH; it is exactly the shape that lifted
+    # mimic robotics' weakest criterion.
+    items = [
+        make_item(
+            SourceType.TRADE_PRESS,
+            EvidenceGrade.DIRECT,
+            source_url="https://example.com/a",
+            direct_because=DirectEvidenceKind.NONE,
+        ),
+        make_item(
+            SourceType.CUSTOMER_SIDE,
+            EvidenceGrade.DIRECT,
+            source_url="https://example.com/real",
+            direct_because=DirectEvidenceKind.NONE,
+        ),
+    ]
+
+    # Act
+    cleaned = normalise_evidence(items, KNOWN_URLS)
+
+    # Assert
+    assert derive_confidence(EvidenceStatus.FOUND, cleaned) is Confidence.MEDIUM
+
+
+def test_naming_something_concrete_keeps_the_direct_grade() -> None:
+    # Arrange - the check must not punish real evidence
+    for kind in [
+        DirectEvidenceKind.NAMED_CUSTOMER,
+        DirectEvidenceKind.UNIT_COUNT,
+        DirectEvidenceKind.SIGNED_AGREEMENT,
+        DirectEvidenceKind.DATED_DEPLOYMENT,
+        DirectEvidenceKind.REGULATORY_RECORD,
+    ]:
+        items = [make_item(SourceType.CUSTOMER_SIDE, EvidenceGrade.DIRECT, direct_because=kind)]
+
+        # Act / Assert
+        assert normalise_evidence(items, KNOWN_URLS)[0].evidence_grade is EvidenceGrade.DIRECT, kind
+
+
+def test_a_record_predating_the_field_is_left_alone() -> None:
+    # Arrange - not_stated means the record was written before the field existed.
+    # Re-grading it would silently rewrite evidence nobody re-examined.
+    items = [
+        make_item(
+            SourceType.CUSTOMER_SIDE,
+            EvidenceGrade.DIRECT,
+            direct_because=DirectEvidenceKind.NOT_STATED,
+        )
+    ]
+
+    # Act / Assert
+    assert normalise_evidence(items, KNOWN_URLS)[0].evidence_grade is EvidenceGrade.DIRECT
 
 
 def main() -> None:

@@ -376,7 +376,12 @@ absence. This makes §4b enforceable and removes run-to-run drift, at a stated c
 independent source and six both return HIGH. Confidence here answers *who said it*, not *how much
 of it there is*.
 
-**Nothing checks that a piece of evidence belongs to the criterion it was filed under.**
+**Narrowed after the first run.** HIGH now requires two independent direct sources rather than
+one, so it means *corroborated*. Seven of the flags across the five companies moved down as a
+result. The limitation is real but smaller than first written: above two, volume still does not
+move the flag.
+
+**Nothing checked that a piece of evidence belonged to the criterion it was filed under.**
 Extraction assigns each item to a criterion, and the confidence rule then counts items; neither
 step asks whether the claim is *about* that criterion. Measured on mimic robotics (§5b): a
 product announcement filed under field traction was graded a direct claim from an independent
@@ -384,6 +389,14 @@ source and, on its own, lifted the company's weakest criterion to HIGH. Combined
 rule above — one qualifying item scores the same as fourteen — a single misfiled item is enough
 to erase a coverage gap. Reading the evidence list is part of reading the score here, not an
 optional audit on top of it.
+
+**Addressed, and the fix is not free of its own assumption.** An evidence item must now name what
+makes it direct — a named customer, a unit count, a signed agreement, a dated deployment, or a
+regulatory record — and one that names none of those is recorded as indirect regardless of the
+grade the model assigned. The scoring prompt also now states that one fact scores under one
+criterion only, with the ATEX case named. Both rules take effect on the next run of their step;
+the scores in §5 predate them. The assumption they rest on is that the model labels its own
+reasoning honestly, which is weaker than a check that reads the claim itself.
 
 **Public evidence only.** No interviews, no customer references, no proprietary databases. This
 favours companies that publicise well over companies that deploy well — exactly the confusion §3b

@@ -49,7 +49,7 @@ ANCHORS = """| Criterion | 1 | 3 | 5 |
 | Team / execution (25) | First-time founders, no hardware shipped, flat team. | Credible technical founders, one generation shipped, steady hiring. ETH/EPFL pedigree caps here. | Shipped hardware at scale before, or 2+ generations with shortening cycles; pulls senior talent from big tech. |
 | Technology (20) | Reproducible with off-the-shelf parts; capability already in the published research of others. | Real engineering depth, but the approach is broadly available. | Compounds with use: proprietary data flywheel, unbuyable component, or multi-year certification. |
 | Market (15) | Narrow niche, or no existing budget line for this spend. | Sizeable but crowded, or procurement cycles long enough to starve a startup. | Large segment, urgent and already budgeted pain, buyer purchases in this category today. |
-| Timing (10) | Could have been built five years ago and was not; no external change explains now. | Rides the general Physical AI wave. This is the default. | A specific dateable unlock: regulation, component price threshold, customer mandate. |"""
+| Timing (10) | Could have been built five years ago and was not; no external change explains now. | Rides the general Physical AI wave. This is the default. | A specific dateable unlock the company does not control: a regulation entering force, a component crossing a price threshold, a customer-side mandate. |"""
 
 SCORING_PROMPT = """Score {name} on the five criteria below. It is a company in the \
 Physical AI sector - robots and autonomous machines that perceive and act in the physical \
@@ -81,6 +81,23 @@ third-party confirmation. Weigh it accordingly.
 
 Funding is not traction. A large round says what investors believed; it belongs to \
 team_execution as a statement about resources.
+
+# One fact, one criterion
+
+A single fact scores under one criterion only. This is not a style preference: the
+weights assume the criteria measure different things, so a fact counted twice inflates
+the company that holds it.
+
+The case that caused this rule: a hazardous-area certification is **technology**
+evidence - it is the multi-year certification moat the technology 5 anchor names. It is
+not also a timing unlock. Timing asks what changed in the world that the company does
+not control; a certificate the company went out and earned is something it did, not
+something that happened to it.
+
+The same applies generally. A signed customer agreement is traction, not market
+evidence that the segment is budgeted. A funding round is team_execution, not timing.
+When a fact could plausibly sit in two places, put it where it is strongest and leave
+it out of the other.
 
 # What you must not do
 

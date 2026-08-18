@@ -120,8 +120,8 @@ The model does **not** choose the confidence level. It is derived in code from t
 
 | Result | Condition |
 |---|---|
-| `HIGH` | At least one `direct` item from a source that is not the company itself (`customer_side`, `tender_record`, `trade_press`) |
-| `MEDIUM` | Evidence exists, but only vendor-sourced or only indirect |
+| `HIGH` | **At least two** `direct` items from sources that are not the company itself (`customer_side`, `tender_record`, `trade_press`) |
+| `MEDIUM` | Evidence exists, but is vendor-sourced, indirect, or rests on a single independent direct item |
 | `LOW` | `evidence_status` is `searched_not_found` |
 | `null` | `evidence_status` is `not_searched` — no confidence is asserted about an absent measurement |
 
@@ -134,9 +134,22 @@ between runs.
 **It makes §4b enforceable rather than aspirational.** The cap at 2 fires from a computed value, so
 the rule cannot be quietly skipped on a company with persuasive marketing.
 
-The trade-off, stated rather than hidden: a hand-written rule is cruder than judgment. A single
-strong customer-side source and six of them both yield `HIGH`. Volume is visible in the evidence
-list, and step 3 can weigh it — but it does not move the confidence flag.
+The trade-off, stated rather than hidden: a hand-written rule is cruder than judgment. Six strong
+customer-side sources and two of them both yield `HIGH`. Volume above the threshold is visible in
+the evidence list, and step 3 can weigh it — but it does not move the confidence flag.
+
+**Revised after the first run.** The threshold was originally one independent direct item, and
+mimic robotics showed what that cost: its field traction — the criterion the company is weakest
+on, and the one the calibration set exists to test — read `HIGH` on a single item, and that item
+turned out to be a product announcement filed under traction. Requiring two means `HIGH` says
+*corroborated* rather than *sourced*. Re-derived across the five stored records, the change moved
+seven flags from `HIGH` to `MEDIUM` and none the other way.
+
+**A second rule, added at the same time.** Grading an item `direct` is a claim about the evidence,
+so an item now has to name what earns it: a named customer, a unit count, a signed agreement, a
+dated deployment, or a regulatory record. An item that names none of those is recorded as
+`indirect`, whatever grade the model assigned. A product announcement is concrete, recent and
+specific, and evidences nothing about deployment; that combination is what slipped through.
 
 ---
 

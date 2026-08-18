@@ -19,6 +19,7 @@ from dotenv import load_dotenv
 
 from schema import (
     CRITERION_NAMES,
+    CriterionEvidence,
     ExtractionOutput,
     build_criterion_record,
     canonical_url,
@@ -40,6 +41,7 @@ MAX_OUTPUT_TOKENS = 64000
 INPUT_DIR = Path("data/raw")
 OUTPUT_DIR = Path("data/output")
 RUN_ALL_KEYWORD = "all"
+OUTPUT_SUFFIX = ".extracted.json"
 
 # Same list prices as collect_sources.py, kept local so each step reports its
 # own spend without importing across modules.
@@ -90,6 +92,11 @@ you cannot tell which of the two applies, choose `not_searched`.
   study is `vendor_case_study` even when it names a real customer.
 - `evidence_grade` is `direct` for a named customer, a unit count, a date, or a signed
   agreement. It is `indirect` for job postings, unnamed customers, and vague claims.
+- `direct_because` must name what earns that grade: `named_customer`, `unit_count`,
+  `signed_agreement`, `dated_deployment` or `regulatory_record`. If an item carries none
+  of those, set `none` - it will be recorded as indirect, which is the honest label.
+  A product or model announcement with no customer, site, unit or agreement in it is
+  `none`, however concrete and recent it sounds. Never return `not_stated`.
 - Funding rounds are never traction evidence. They belong under `team_execution` as
   context about the company's resources.
 - The report distinguishes company claims from third-party confirmation. Preserve that in
@@ -270,7 +277,7 @@ def extract_one(client: anthropic.Anthropic, slug: str) -> dict:
     }
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    path = OUTPUT_DIR / f"{slug}.extracted.json"
+    path = OUTPUT_DIR / f"{slug}{OUTPUT_SUFFIX}"
     path.write_text(json.dumps(record, indent=2, ensure_ascii=False), encoding="utf-8")
 
     report_criteria(criteria)
@@ -294,8 +301,10 @@ def report_criteria(criteria: dict) -> None:
 
 def already_extracted() -> set[str]:
     """Slugs that already have a step 2 record on disk."""
-    suffix = ".extracted.json"
-    return {path.name[: -len(suffix)] for path in OUTPUT_DIR.glob(f"*{suffix}")}
+    return {
+        path.name[: -len(OUTPUT_SUFFIX)]
+        for path in OUTPUT_DIR.glob(f"*{OUTPUT_SUFFIX}")
+    }
 
 
 def resolve_targets(argument: str) -> list[str]:
@@ -323,8 +332,70 @@ def resolve_targets(argument: str) -> list[str]:
     return pending
 
 
+def rederive_one(slug: str) -> list[str]:
+    """Re-apply the stored rules to one record, returning the changes made."""
+    path = OUTPUT_DIR / f"{slug}{OUTPUT_SUFFIX}"
+    record = json.loads(path.read_text(encoding="utf-8"))
+    allowed = known_urls(load_report(slug))
+
+    changes = []
+    for name in CRITERION_NAMES:
+        before = record["criteria"][name]
+        # Records written before direct_because existed carry no opinion about what
+        # made an item direct, and inventing one would silently re-grade real evidence.
+        for item in before["evidence"]:
+            item.setdefault("direct_because", "not_stated")
+        rebuilt = build_criterion_record(
+            CriterionEvidence(**before), allowed
+        ).model_dump()
+
+        if rebuilt["confidence"] != before["confidence"]:
+            # str(Enum) would print "Confidence.MEDIUM"; the stored value is "MEDIUM"
+            changes.append(
+                f"{name}: {before['confidence']} -> {rebuilt['confidence'].value}"
+            )
+        if len(rebuilt["evidence"]) != len(before["evidence"]):
+            changes.append(
+                f"{name}: {len(before['evidence'])} -> {len(rebuilt['evidence'])} items"
+            )
+        record["criteria"][name] = rebuilt
+
+    path.write_text(json.dumps(record, indent=2, ensure_ascii=False), encoding="utf-8")
+    return changes
+
+
+def rederive_all() -> None:
+    """Recompute every stored record's derived fields, with no API call.
+
+    Confidence, the section 4b downgrade and the URL check are all computed in
+    Python from evidence that is already on disk. When one of those rules changes,
+    re-running the extraction would pay again for the same model output.
+    """
+    slugs = sorted(
+        path.name[: -len(OUTPUT_SUFFIX)] for path in OUTPUT_DIR.glob(f"*{OUTPUT_SUFFIX}")
+    )
+    if not slugs:
+        sys.exit(f"FAIL: no extracted records in {OUTPUT_DIR}. Run step 2 first.")
+
+    print(f"Re-deriving {len(slugs)} record(s) from stored evidence, no API call.")
+    total = 0
+    for slug in slugs:
+        changes = rederive_one(slug)
+        total += len(changes)
+        print(f"\n[{slug}] {len(changes)} change(s)")
+        for change in changes:
+            print(f"    {change}")
+
+    print(f"\nDone. {total} change(s) across {len(slugs)} record(s).")
+
+
 def main() -> None:
     argument = sys.argv[1] if len(sys.argv) > 1 else RUN_ALL_KEYWORD
+
+    if argument == "rederive":
+        rederive_all()
+        return
+
     targets = resolve_targets(argument)
 
     print(f"Step 2: extraction for {len(targets)} company(ies), model {EXTRACTION_MODEL}")

@@ -51,6 +51,13 @@ INDEPENDENT_SOURCE_TYPES = frozenset(
 ALWAYS_INDIRECT_SOURCE_TYPES = frozenset({SourceType.JOB_POSTING})
 
 
+# HIGH means corroborated, not merely sourced. One independent direct claim and six
+# returned the same flag until mimic robotics showed what that costs: its field
+# traction read HIGH on a single item, and that item was a product announcement.
+# Two is the smallest number that means more than one person said so.
+MIN_INDEPENDENT_SOURCES_FOR_HIGH = 2
+
+
 class EvidenceGrade(str, Enum):
     DIRECT = "direct"
     INDIRECT = "indirect"
@@ -68,6 +75,28 @@ class Confidence(str, Enum):
     LOW = "LOW"
 
 
+class DirectEvidenceKind(str, Enum):
+    """What makes an item direct rather than suggestive.
+
+    Added after a product announcement - a new model built with a partner, naming no
+    customer, site, unit or agreement - was filed under field traction, graded direct,
+    and on its own carried that criterion to HIGH. Grading something direct is a claim,
+    and a claim should have to name itself.
+
+    NOT_STATED exists only for records extracted before this field did. The extraction
+    prompt forbids it, and a test pins that meaning so it cannot quietly become an
+    escape hatch.
+    """
+
+    NAMED_CUSTOMER = "named_customer"
+    UNIT_COUNT = "unit_count"
+    SIGNED_AGREEMENT = "signed_agreement"
+    DATED_DEPLOYMENT = "dated_deployment"
+    REGULATORY_RECORD = "regulatory_record"
+    NONE = "none"
+    NOT_STATED = "not_stated"
+
+
 class EvidenceItem(BaseModel):
     """One sourced factual claim. Without a URL it is not usable and is dropped."""
 
@@ -75,6 +104,17 @@ class EvidenceItem(BaseModel):
     source_url: str = Field(description="The page this claim came from.")
     source_type: SourceType
     evidence_grade: EvidenceGrade
+    direct_because: DirectEvidenceKind = Field(
+        description=(
+            "What makes this direct: a named customer, a unit count, a signed "
+            "agreement, a dated deployment, or a regulatory record. Use 'none' when "
+            "the item carries none of those - it will be treated as indirect. Never "
+            "use 'not_stated'."
+        ),
+    )
+    # No default on purpose. A field with one is omitted from the structured-output
+    # `required` list, so the model may leave it out and the rule above never fires.
+    # Records written before this field existed are filled in by extract.py rederive.
     published_date: str | None = Field(
         description="ISO date (YYYY-MM-DD) if the source states one, else null."
     )
@@ -156,7 +196,11 @@ def normalise_evidence(
         than by link, so a model asked for a URL will produce a plausible-looking
         domain instead of admitting it has none. Such a claim reads as audited and
         is not, which is worse than no claim at all;
-      * a job posting is forced to `indirect` per section 4c.
+      * a job posting is forced to `indirect` per section 4c;
+      * an item graded `direct` that names nothing concrete behind that grade is
+        downgraded to `indirect`. Calling something direct is a claim about the
+        evidence, and an item that cannot name a customer, a unit count, an
+        agreement, a deployment date or a filing has not earned it.
 
     `known_urls` holds the canonical form of every URL step 1 retrieved.
     """
@@ -172,6 +216,12 @@ def normalise_evidence(
         if item.source_type in ALWAYS_INDIRECT_SOURCE_TYPES:
             item = item.model_copy(update={"evidence_grade": EvidenceGrade.INDIRECT})
 
+        if (
+            item.evidence_grade is EvidenceGrade.DIRECT
+            and item.direct_because is DirectEvidenceKind.NONE
+        ):
+            item = item.model_copy(update={"evidence_grade": EvidenceGrade.INDIRECT})
+
         cleaned.append(item)
 
     return cleaned
@@ -182,6 +232,10 @@ def derive_confidence(
 ) -> Confidence | None:
     """Compute the confidence flag from the evidence, per section 4 of the schema doc.
 
+    HIGH requires corroboration: at least MIN_INDEPENDENT_SOURCES_FOR_HIGH direct
+    claims from independent sources. A single such claim returns MEDIUM, because a
+    lone item can be wrong about what it evidences and nothing contradicts it.
+
     Returns None for `not_searched`: an absent measurement gets no confidence
     level, because asserting one would imply the area was actually checked.
     """
@@ -191,12 +245,17 @@ def derive_confidence(
     if status is EvidenceStatus.SEARCHED_NOT_FOUND or not evidence:
         return Confidence.LOW
 
-    has_independent_direct = any(
-        item.evidence_grade is EvidenceGrade.DIRECT
-        and item.source_type in INDEPENDENT_SOURCE_TYPES
+    independent_direct = sum(
+        1
         for item in evidence
+        if item.evidence_grade is EvidenceGrade.DIRECT
+        and item.source_type in INDEPENDENT_SOURCE_TYPES
     )
-    return Confidence.HIGH if has_independent_direct else Confidence.MEDIUM
+    return (
+        Confidence.HIGH
+        if independent_direct >= MIN_INDEPENDENT_SOURCES_FOR_HIGH
+        else Confidence.MEDIUM
+    )
 
 
 def build_criterion_record(
