@@ -256,6 +256,6 @@ the ranking is used for anything.
 - Scoring: `claude-opus-5`
 - Report assembly: no model. Every figure above is computed from the stored
   records, and every justification is quoted verbatim from the scoring step.
-- Total API cost of the run behind this report: **$9.87**
+- Total API cost of the records behind this report: **$9.87**. This counts the files that survive on disk. Work that was discarded — a research run repeated at a larger search budget, an extraction rejected for unverifiable sources — is not included, so the amount actually spent building this was higher.
 
 Regenerate with `.venv\Scripts\python.exe src\report.py`.

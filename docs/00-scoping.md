@@ -238,7 +238,7 @@ Two models, assigned per step rather than one model for the whole pipeline. The 
 | 1. Source collection | `claude-sonnet-5` | High input volume (search results), low judgment. Finding and returning pages is not where model capability separates. |
 | 2. Structured extraction | `claude-sonnet-5` | Reading a page and filling a schema field with its source URL. Mechanical once the schema is fixed. |
 | 3. Weighted scoring | `claude-opus-5` | The only step that is pure judgment: arbitrating between the 1/3/5 anchors, applying the missing-evidence cap, and writing a justification that survives challenge. This is the step the project is actually about. |
-| 4. Report generation | `claude-sonnet-5` | Formatting already-decided content. |
+| 4. Report generation | **none** | Formatting already-decided content — and once that is true, a model is the wrong tool. Assembled in Python from the stored records, so no figure can drift from the record it came from. Free and reproducible. Sonnet was allocated here originally; the change is recorded rather than silent. |
 | 5. Thesis and executive summary | `claude-opus-5` | Synthesis across 26 scored companies — pattern-finding, not transcription. |
 
 Cost at August 2026 list prices: Opus is 2.5× Sonnet per token on both input and output. Running
@@ -414,6 +414,14 @@ expected to discriminate and, on the calibration set, did not: four of five comp
 Together that is 25 points of 100 doing little ranking work, which concentrates the real
 discrimination in traction and team. Raising the Market bar is a change to consider after the full
 run, not mid-flight.
+
+**One fact scores twice.** ANYbotics' ATEX/IECEx Zone 1 certification is credited under
+technology, as the multi-year certification moat the 5 anchor names, and again under timing, as
+a dated external unlock. It is the single most important fact in the set, and the rubric counts
+it in two places, which inflates the company that holds it. Found by the pipeline's own synthesis
+step rather than by me, which is the reason it is written here instead of quietly patched: a
+criterion set that can double-count is a finding about the criteria. The fix is to decide which
+criterion owns a certification before the next run, not to adjust one score after the fact.
 
 ---
 

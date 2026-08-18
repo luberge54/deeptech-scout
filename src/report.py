@@ -328,7 +328,11 @@ def render_provenance(companies: list[dict]) -> str:
             f"- Scoring: `{', '.join(sorted(scoring_models))}`",
             "- Report assembly: no model. Every figure above is computed from the stored",
             "  records, and every justification is quoted verbatim from the scoring step.",
-            f"- Total API cost of the run behind this report: **${total_pipeline_cost():.2f}**",
+            f"- Total API cost of the records behind this report:"
+            f" **${total_pipeline_cost():.2f}**. This counts the files that survive on disk."
+            " Work that was discarded — a research run repeated at a larger search budget, an"
+            " extraction rejected for unverifiable sources — is not included, so the amount"
+            " actually spent building this was higher.",
             "",
             "Regenerate with `.venv\\Scripts\\python.exe src\\report.py`.",
         ]
