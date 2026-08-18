@@ -261,13 +261,40 @@ Hand-scoring completed 2026-08-18, blind, before any pipeline code was written. 
 per-criterion scores, confidence levels, and justifications are in
 [`calibration-worksheet.md`](calibration-worksheet.md).
 
+Scored 2026-08-18 on `claude-opus-5`. The model saw only the extracted evidence: never the
+open web, never these hand-scores, and never another company. It did not compute its own
+total — the weighting is applied in `src/scoring.py`, by the same arithmetic as the worksheet.
+
 | Company | My score | Model score | Gap | Who was right, and why |
 |---------|----------|-------------|-----|------------------------|
-| ANYbotics | 93/100 | | | |
-| Verity | 92/100 | | | |
-| Gravis Robotics | 85/100 | | | |
-| Humanoid | 77/100 | | | |
-| mimic robotics | 60/100 | | | |
+| ANYbotics | 93/100 | 86/100 | −7 | **Model, narrowly, on technology.** I scored the moat 5; it argued 4 by conceding the ATEX/IECEx Zone 1 certification and then pricing the IP against it — 8 patents filed, a 2019 patent licence paid to Boston Dynamics, and the ANYdrive actuator now built by an outside supplier. That is a specific case I did not make. Traction, team and timing agree exactly. |
+| Verity | 92/100 | 85/100 | −7 | **Draw, same shape as ANYbotics.** Identical pattern: agreement on traction and team, one notch down on technology and market. Two companies I rated within a point of each other are still within a point of each other. |
+| Gravis Robotics | 85/100 | 70/100 | −15 | **Model, on technology (−2).** I scored 5. It found no compounding advantage: commodity cameras, lidar and GNSS, no certification barrier, BuiltWorlds placing Gravis beside Hive Autonomy and SafeAI doing the same retrofit approach, and the CEO's own point that electronic joystick signals make retrofits easy — which opens the same door to competitors. I scored this the day after a $200M round; I should treat that as a possible influence on my read. |
+| Humanoid | 77/100 | 59/100 | −18 | **Model, and the test inverted — see below.** Traction −2 and market −2 carry the whole gap. |
+| mimic robotics | 60/100 | 54/100 | −6 | **Draw, and the closest agreement in the set.** Traction identical at 2. It is +1 on market where I was harsh, −1 on technology and team. Nothing here separates us. |
+
+Agreement across the 25 criterion scores: **12 exact, 22 within one notch**, three disagreements
+of two notches (Gravis technology, Humanoid traction, Humanoid market).
+
+**The model is stricter than me on every company, never more generous.** A directional bias is a
+more useful finding than scatter would have been: it is one correction to argue about, not five.
+
+**The ranking is identical.** ANYbotics, Verity, Gravis Robotics, Humanoid, mimic robotics, in
+that order, on both sides. Where the totals move, the order does not.
+
+Where the disagreement actually sits, summed across the five companies in notches:
+
+| Criterion | Sum of gaps | Reading |
+|-----------|-------------|---------|
+| Team / execution | −1 | Near-consensus. We read founders and hiring the same way. |
+| Timing | +1 | Consensus, helped by the 3 default doing its job. |
+| Field traction | −3 | Concentrated: Humanoid −2 and Gravis −1. The other three agree exactly. |
+| Market | −4 | **The model discriminates where I did not.** I gave four 5s (§5, third observation, called this out as a flaw in my own scoring). It gave 4/4/4/3/3. |
+| Technology | −5 | **The real disagreement.** It reads moats as thinner than I do, on four of five companies. |
+
+Technology is the argument to prepare. My scores lean on engineering depth; its scores ask what
+*compounds* — which is closer to what the anchor actually says. That is worth conceding or
+defending explicitly, not splitting.
 
 Three observations from the hand-scoring pass, recorded before seeing any model output:
 
@@ -276,6 +303,15 @@ Three observations from the hand-scoring pass, recorded before seeing any model 
   scored 4, on the strength of a dated, binding Schaeffler contract. The reasoning holds, but if
   the model also scores it high, the two possible causes (reading the contract vs. being swayed
   by headline numbers) become indistinguishable.
+
+  **Resolved by the scored run, in the opposite direction to the one the test anticipated.** The
+  model scored Humanoid's traction **2**, against my 4 — it was the stricter reader, not the
+  looser one. It credits the Schaeffler agreement for lifting the score above a pure 1, then
+  refuses 3 because there are no paying installs at three to ten customers, and it flags the
+  "nine industrial deployments with Fortune 500 customers" as single-sourced, self-reported and
+  internally inconsistent, and the 34,000 pre-orders as unverified. On the evidence in front of
+  it, that reading of the anchor is better than mine: I let a binding future commitment stand in
+  for present deployment. This one disagreement is −12 of the −18 point gap on Humanoid.
 - **Gravis Robotics no longer tests the coverage floor.** It was chosen for near-zero public
   coverage. A $200M SoftBank round announced 2026-08-17 changed that overnight; it scored 85 with
   HIGH confidence on four of five criteria. **mimic robotics is now the only functioning
@@ -303,9 +339,18 @@ scores exist, because they change how the table above should be read.
   all `indirect`. The same count is 14 for Verity, 9 for ANYbotics, 8 for Gravis Robotics and
   4 for Humanoid. All five are rated HIGH.
 
-Consequence for the comparison above: if the model and the hand-score agree on mimic
-robotics, that agreement is not evidence that the pipeline measured its weakness. It did not
-measure it.
+**Corrected after scoring — the warning above applies to step 2 only.** Written before step 3
+ran, this section concluded that the pipeline had not measured mimic robotics' weakness. The
+scored result contradicts that. Opus rated its field traction **2/5, the same value I gave it by
+hand**, and its justification names precisely what the confidence flag missed: *every customer
+claim is unnamed and company-sourced*, SiliconANGLE *explicitly notes no names were disclosed*,
+and nothing shows *a paying deployment, a unit count, or a repeat order*.
+
+So the gap is real but it is contained. Step 2's confidence rule was fooled; step 3 was not,
+because it reads `evidence_grade` and `attributed_to` rather than the summary flag. The honest
+statement is narrower than the one first recorded here: **a HIGH confidence flag is not a
+statement about how strong the evidence is, and should not be read as one** — in the report, or
+by anyone using this pipeline. The scores themselves are not affected.
 
 ---
 
