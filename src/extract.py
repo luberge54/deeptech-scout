@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import anthropic
+import pydantic
 from dotenv import load_dotenv
 
 from schema import (
@@ -25,7 +26,15 @@ from schema import (
 # docs/00-scoping.md section 4d: extraction is mechanical once the schema is
 # fixed, so it runs on Sonnet. Judgement happens in step 3, on Opus.
 EXTRACTION_MODEL = "claude-sonnet-5"
-MAX_OUTPUT_TOKENS = 16000
+
+# Measured, not guessed: at 16000 the ANYbotics extraction stopped with
+# stop_reason "max_tokens" and a JSON string cut mid-word. Only about a third of
+# that budget reached the JSON - Sonnet 5 runs adaptive thinking by default and
+# the reasoning is billed from the same ceiling. Sonnet 5 allows up to 128000, and
+# a ceiling is a limit rather than a target, so a higher one costs nothing extra on
+# reports that finish early. Above roughly 16000 the SDK needs streaming to avoid
+# an HTTP timeout, which is why this step streams.
+MAX_OUTPUT_TOKENS = 64000
 
 INPUT_DIR = Path("data/raw")
 OUTPUT_DIR = Path("data/output")
@@ -133,16 +142,32 @@ def extract_one(client: anthropic.Anthropic, slug: str) -> dict:
     )
 
     try:
-        response = client.messages.parse(
+        with client.messages.stream(
             model=EXTRACTION_MODEL,
             max_tokens=MAX_OUTPUT_TOKENS,
             messages=[{"role": "user", "content": prompt}],
             output_format=ExtractionOutput,
-        )
+        ) as stream:
+            response = stream.get_final_message()
     except anthropic.APIStatusError as error:
         sys.exit(f"FAIL: API error (HTTP {error.status_code}): {error.message}")
     except anthropic.APIConnectionError:
         sys.exit("FAIL: could not reach the API. Check your internet connection.")
+    except pydantic.ValidationError as error:
+        # Truncation is the likely cause and the raw error never says so, so name it
+        # here rather than leaving the next reader to rediscover it.
+        sys.exit(
+            f"""FAIL: the reply for {slug} did not validate against the schema.
+      If the error below mentions unterminated or invalid JSON, the reply was
+      cut off at the {MAX_OUTPUT_TOKENS:,}-token ceiling. Raise MAX_OUTPUT_TOKENS.
+      {error}"""
+        )
+
+    if response.stop_reason == "max_tokens":
+        sys.exit(
+            f"""FAIL: {slug} hit the {MAX_OUTPUT_TOKENS:,}-token output ceiling, so the
+      record would be incomplete. Nothing was written. Raise MAX_OUTPUT_TOKENS."""
+        )
 
     extracted = response.parsed_output
     if extracted is None:
