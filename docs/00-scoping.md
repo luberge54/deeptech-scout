@@ -285,6 +285,28 @@ Three observations from the hand-scoring pass, recorded before seeing any model 
   reach. Weight is only 15, so the effect on the ranking is bounded — but it is a real finding
   about the criteria, not about the companies.
 
+### 5b. Observations from the extraction pass, before any scoring
+
+Step 2 ran on all five companies on 2026-08-18. Two findings are recorded here, before the
+scores exist, because they change how the table above should be read.
+
+- **The missing-evidence test did not fire on the company it was built for.** mimic robotics
+  is the only company in the set still carrying a thin public footprint, and it was
+  hand-scored 60/100 largely for that reason. Extraction returned `field_traction: found` at
+  HIGH confidence. Its step 1 report states plainly that no named paying customer was
+  confirmed by any third party. Neither `searched_not_found` nor `not_searched` was assigned,
+  so the §4b cap never engaged.
+- **A single item carried that rating, and it is not traction evidence.** HIGH requires one
+  direct claim from an independent source. For mimic robotics that claim is a July 2026 trade
+  article reporting a new video-action model developed with Black Forest Labs — a product
+  announcement naming no customer, site, unit count, or agreement. The other six items are
+  all `indirect`. The same count is 14 for Verity, 9 for ANYbotics, 8 for Gravis Robotics and
+  4 for Humanoid. All five are rated HIGH.
+
+Consequence for the comparison above: if the model and the hand-score agree on mimic
+robotics, that agreement is not evidence that the pipeline measured its weakness. It did not
+measure it.
+
 ---
 
 ## 6. Known limitations
@@ -308,6 +330,15 @@ Python, not asked of the model: HIGH requires at least one direct claim from an 
 absence. This makes §4b enforceable and removes run-to-run drift, at a stated cost — one
 independent source and six both return HIGH. Confidence here answers *who said it*, not *how much
 of it there is*.
+
+**Nothing checks that a piece of evidence belongs to the criterion it was filed under.**
+Extraction assigns each item to a criterion, and the confidence rule then counts items; neither
+step asks whether the claim is *about* that criterion. Measured on mimic robotics (§5b): a
+product announcement filed under field traction was graded a direct claim from an independent
+source and, on its own, lifted the company's weakest criterion to HIGH. Combined with the binary
+rule above — one qualifying item scores the same as fourteen — a single misfiled item is enough
+to erase a coverage gap. Reading the evidence list is part of reading the score here, not an
+optional audit on top of it.
 
 **Public evidence only.** No interviews, no customer references, no proprietary databases. This
 favours companies that publicise well over companies that deploy well — exactly the confusion §3b
