@@ -223,15 +223,35 @@ def report_criteria(criteria: dict) -> None:
         )
 
 
+def already_extracted() -> set[str]:
+    """Slugs that already have a step 2 record on disk."""
+    suffix = ".extracted.json"
+    return {path.name[: -len(suffix)] for path in OUTPUT_DIR.glob(f"*{suffix}")}
+
+
 def resolve_targets(argument: str) -> list[str]:
-    """Expand the argument into slugs, using whatever step 1 has already produced."""
+    """Expand the argument into slugs, using whatever step 1 has already produced.
+
+    Batch mode skips work that is already on disk, mirroring step 1. Without this
+    a run that stops partway - a credit failure, an interrupt - would charge again
+    for every company it had already finished when it is restarted.
+    """
     if argument != RUN_ALL_KEYWORD:
         return [argument]
 
     collected = sorted(path.stem for path in INPUT_DIR.glob("*.json"))
     if not collected:
         sys.exit(f"FAIL: no collected reports in {INPUT_DIR}. Run step 1 first.")
-    return collected
+
+    done = already_extracted()
+    if done:
+        print(f"Already extracted, skipping: {', '.join(sorted(done))}")
+        print("To re-extract one of these, pass its slug explicitly.")
+
+    pending = [slug for slug in collected if slug not in done]
+    if not pending:
+        sys.exit("Nothing to do - every collected report has already been extracted.")
+    return pending
 
 
 def main() -> None:
