@@ -256,6 +256,6 @@ the ranking is used for anything.
 - Scoring: `claude-opus-5`
 - Report assembly: no model. Every figure above is computed from the stored
   records, and every justification is quoted verbatim from the scoring step.
-- Total API cost of the run behind this report: **$9.59**
+- Total API cost of the run behind this report: **$9.87**
 
 Regenerate with `.venv\Scripts\python.exe src\report.py`.

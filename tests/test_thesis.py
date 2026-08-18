@@ -1,9 +1,13 @@
 """Tests for the offline parts of src/thesis.py.
 
-The guard tested here exists because of a real failure: the first thesis run
-returned the literal string "placeholder" for its last section, and the document
-was written anyway. A required field can be satisfied by one word, so the
-structured-output contract cannot catch this on its own.
+Both guards tested here exist because of real failures in the first two thesis
+runs. The first satisfied a required field with the literal string "placeholder"
+and the document was written around it. The second wrote every section properly
+but double-escaped its em-dashes, so the finished file carried the six characters
+of an escape sequence 39 times instead of the dash.
+
+Neither is something the structured-output contract can catch: both are valid
+strings. They are caught here, and both are cheap to check.
 
 Run with:  .venv/Scripts/python.exe tests/test_thesis.py
 """
@@ -21,6 +25,11 @@ REAL_PROSE = (
     "the method rather than a survey of the sector, and each was researched in a "
     "single search pass whose budget ran out on four of the five."
 )
+
+# The escape sequence as six literal characters, built rather than typed so the
+# test file itself cannot be the thing that decodes it.
+ESCAPED_DASH = chr(92) + "u2014"
+EM_DASH = chr(8212)
 
 
 def make_thesis(**overrides) -> thesis.Thesis:
@@ -75,6 +84,58 @@ def test_a_section_mentioning_a_stand_in_word_is_not_caught() -> None:
 
     # Act / Assert
     assert thesis.find_empty_sections(written) == []
+
+
+def test_a_double_escaped_character_is_decoded() -> None:
+    # Arrange - what the second run produced 39 times: an em-dash written into the
+    # JSON as its escape sequence rather than as the character itself
+    text = f"Four are Swiss {ESCAPED_DASH} one British."
+
+    # Act
+    decoded = thesis.decode_escaped_characters(text)
+
+    # Assert - the finished document must carry the dash, not six literal characters
+    assert decoded == f"Four are Swiss {EM_DASH} one British."
+    assert ESCAPED_DASH not in decoded
+
+
+def test_ordinary_prose_is_left_exactly_as_written() -> None:
+    # Arrange - the repair must not touch text that never needed it
+    text = f"A sentence with a real em-dash {EM_DASH} and a Windows path C:/x/y."
+
+    # Act / Assert
+    assert thesis.decode_escaped_characters(text) == text
+
+
+def test_cleaning_repairs_every_section_of_a_thesis() -> None:
+    # Arrange
+    written = make_thesis(
+        the_thesis=(
+            f"Value accrues to narrow machines {ESCAPED_DASH} not to platforms. "
+            + REAL_PROSE
+        )
+    )
+
+    # Act
+    cleaned = thesis.clean(written)
+
+    # Assert
+    assert ESCAPED_DASH not in cleaned.the_thesis
+    assert EM_DASH in cleaned.the_thesis
+
+
+def test_the_written_thesis_carries_no_escape_sequences() -> None:
+    # Arrange - the document on disk is the deliverable, so check the real thing
+    if not thesis.OUTPUT_PATH.exists():
+        print("       (skipped: no thesis document on disk)")
+        return
+
+    # Act
+    document = thesis.OUTPUT_PATH.read_text(encoding="utf-8")
+
+    # Assert
+    assert ESCAPED_DASH not in document
+    assert chr(92) + "u" not in document, "an escape sequence survived into the document"
 
 
 def main() -> None:

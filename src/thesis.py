@@ -15,6 +15,7 @@ Run with:  .venv\\Scripts\\python.exe src\\thesis.py
 
 import json
 import os
+import re
 import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -43,6 +44,29 @@ TOKENS_PER_MILLION = 1_000_000
 # literal string "placeholder" for the last section and the document was written
 # anyway, so sections are now checked for length and for the stand-in strings a
 # model reaches for when it means to come back to something.
+# A model writing JSON can double-escape a character, so an em-dash arrives as the
+# six literal characters — rather than as the dash. Steps 2 and 3 never did
+# this; the thesis run did it 39 times, and it reads as corruption in the finished
+# document. Repaired here rather than asked for in the prompt, because the prompt
+# cannot be relied on and this is cheap to verify.
+ESCAPED_CHARACTER = re.compile(r"\\u([0-9a-fA-F]{4})")
+
+
+def decode_escaped_characters(text: str) -> str:
+    """Turn a literal escape sequence back into the character it stands for."""
+    return ESCAPED_CHARACTER.sub(lambda match: chr(int(match.group(1), 16)), text)
+
+
+def clean(thesis: "Thesis") -> "Thesis":
+    """The thesis with every section's escapes decoded."""
+    return Thesis(
+        **{
+            name: decode_escaped_characters(value)
+            for name, value in thesis.model_dump().items()
+        }
+    )
+
+
 MIN_SECTION_CHARS = 200
 PLACEHOLDER_STRINGS = frozenset({"placeholder", "tbd", "todo", "n/a", "none", "..."})
 
@@ -289,7 +313,37 @@ def render_document(thesis: Thesis, companies: list[dict], model: str) -> str:
     )
 
 
+def rebuild_from_record() -> None:
+    """Re-render the document from the stored record, without calling the API.
+
+    The synthesis is the most expensive single call in the pipeline. When only the
+    layout or the escape handling changes, paying for the same judgement twice
+    would be waste.
+    """
+    if not RECORD_PATH.exists():
+        sys.exit(f"FAIL: no thesis record at {RECORD_PATH}. Run without 'rebuild' first.")
+
+    record = json.loads(RECORD_PATH.read_text(encoding="utf-8"))
+    stored = clean(Thesis(**record["thesis"]))
+
+    empty = find_empty_sections(stored)
+    if empty:
+        sys.exit(
+            f"FAIL: the stored thesis has {len(empty)} unwritten section(s): "
+            f"{', '.join(empty)}. Re-run without 'rebuild' to regenerate it."
+        )
+
+    OUTPUT_PATH.write_text(
+        render_document(stored, load_companies(), record["model"]), encoding="utf-8"
+    )
+    print(f"Rebuilt {OUTPUT_PATH} from {RECORD_PATH}, no API call.")
+
+
 def main() -> None:
+    if len(sys.argv) > 1 and sys.argv[1] == "rebuild":
+        rebuild_from_record()
+        return
+
     companies = load_companies()
     prompt = build_prompt(companies)
 
@@ -327,6 +381,8 @@ def main() -> None:
     thesis = response.parsed_output
     if thesis is None:
         sys.exit("FAIL: the model returned no parseable thesis.")
+
+    thesis = clean(thesis)
 
     empty = find_empty_sections(thesis)
     if empty:

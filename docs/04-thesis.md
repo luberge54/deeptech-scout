@@ -1,0 +1,76 @@
+# Thesis — Physical AI in Switzerland and Europe
+
+Written 2026-08-18 on `claude-opus-5`, from the 5 companies scored in [`03-market-map.md`](03-market-map.md).
+
+The synthesis below is the model's. The criteria it argues on, and the
+weighting behind them, are set out in [`00-scoping.md`](00-scoping.md) and were
+fixed before any company was scored.
+
+## Executive summary
+
+Across these five companies, nothing about the AI separated them. Field traction did, and traction tracked something unglamorous: whether the company had attached itself to a budget line and a compliance regime that already existed. ANYbotics (86) and Verity (85) sit at the top because their customers oONAAS, Outokumpu, Equinor, GE Vernova, DSV, KeHE, On — say in their own words that fleets are in daily service. The three below them are not technically weaker in any measurable way; they are earlier, and they are trying to create a purchase category rather than fill one. The most striking number in the set is that ANYbotics' single strongest defensive asset is an ATEX/IECEx Zone 1 certification, not a model, while Humanoid ($270M raised) and Gravis ($200M at a $1bn valuation) hold more capital than ANYbotics has raised cumulatively and cannot yet show a repeat order. On this evidence, European Physical AI is being won in the certification, channel and procurement layer, and the model layer is currently commodity. That is a claim about five companies, not a sector census — but it is the claim the evidence supports.
+
+## What the ranking shows
+
+**Technology did not sort anyone.** Model-scored technology across all five: 4, 3, 3, 3, 3. Field traction across the same five: 5, 5, 3, 2, 2. The entire spread in the ranking comes from deployment, and almost none of it from engineering. That is not because the engineering is thin — a 41-DoF humanoid, a 15-DoF tendon-driven hand, a learning controller that infers soil state from hydraulic pressure are all real — but because under a rubric that asks *can a competitor buy this*, the answer was yes almost everywhere.
+
+**Nobody in this sample demonstrated a data flywheel.** ANYbotics' Data Navigator processed 2,500+ inspections in two weeks, but only in pilot framing; Verity's scans are not shown to compound; mimic published its diffusion-policy approach on arXiv and buys its arms; Humanoid runs NVIDIA's Isaac/Jetson Thor stack, available to every competitor, with actuators from Schaeffler and manufacturing outsourced to Bosch; Gravis' CEO volunteers that the OEM switch to electronic joysticks makes retrofit computers easy to plug in — which opens the same door for SafeAI and Hive Autonomy. The one durable barrier found anywhere in the set is regulatory: ANYbotics' ATEX/IECEx Zone 1 IIB certification, a path that ran 2019–2026.
+
+**Capital is decoupled from deployment, and the sign is inverted at the top.** Ranked by money: Humanoid ($270M), Gravis ($200M Series A at $1bn post-money), ANYbotics (~$150M cumulative), Verity (~$50M+ across tranches), mimic ($16M seed). Ranked by traction: ANYbotics and Verity at 5, Gravis 3, Humanoid and mimic 2. The two companies with confirmed multi-site paying fleets have raised less than the two with none.
+
+**The discriminating evidence class is the customer's own newsroom.** Every unit count in this map traces back to the vendor — ANYbotics' ~200 units, Verity's 150 sites, Gravis' \"seven countries,\" Humanoid's 34,000 pre-orders, mimic's unnamed Fortune 500 pilots. What separated the top two was that third parties published on their own letterhead: Outokumpu naming three robots across three plants with a repeat order, PETRONAS confirming a signed 2022 commercial agreement, GE Vernova folding ANYmal into its own APM software, DSV's operations manager framing drones against contractual SLAs. Humanoid has exactly one such artefact — Schaeffler's binding four-digit agreement — and it is the reason it scores 2 rather than 1.
+
+**ETH pedigree is table stakes; shipped-at-scale experience is the lift.** Four of five are ETH spin-offs and the rubric caps pedigree at 3. What pushed teams above it was concrete: Raffaello D'Andrea having co-founded Kiva (Verity, 5/5), ANYbotics' four hardware generations, Jarad Cannon's Brain Corp record at Humanoid (4/5). mimic, with the same lab lineage and one product generation, sits at 3.
+
+**Winners attach; laggards create.** ANYbotics sells into asset-integrity budgets with SLB as channel; Verity sells into inventory-accuracy SLAs; Gravis sells onto plant-hire fleet budgets at Flannery and Holcim. Humanoid and mimic sell general-purpose labour — a line item that does not exist yet, with a Goldman projection to 2035 and a Schaeffler ramp to 2032 standing in for it.
+
+**Calibration reads as systematic conservatism on the interpretive criteria.** The model scored below the hand on technology (−5 notches) and market (−4), and slightly above on timing (+1). Rank order was identical on both sides. The ordering is robust; the absolute scores are a floor, and the 86-vs-85 gap at the top is noise.
+
+## The thesis
+
+**European Physical AI is not currently a competition between learning systems. It is a competition for procurement slots, and the moats being built are certifications, integrations and channel relationships — assets that look boring on a pitch deck and cannot be trained.**
+
+The strongest single fact in this entire map is that the most defensible thing ANYbotics owns is a hazardous-area certification, not a policy network. It has only ~8 patents filed and paid Boston Dynamics a licensing fee in 2019; its actuator is now made by maxon. What competitors cannot shortcut is the seven-year ATEX/IECEx Zone 1 path, and what makes its pipeline addressable is that GE Vernova embedded the robot inside its own APM software and SLB made it a preferred ground robotics supplier. Verity's second place rests on the same structure minus the certification: purpose-built airframes, yes, but its score is carried by DSV framing the drones against contractual SLAs and KeHE rolling from one Arizona site to a hundredth installation. In both cases the defensible asset sits between the robot and the customer's existing spend, not inside the robot.
+
+From this I take a position that can be wrong: **the capital currently flowing to general-purpose embodiment in Europe is mispriced relative to the capital flowing to certified, budget-attached single-purpose autonomy, and the next 24 months will show it.** Humanoid has raised $270M and Gravis carries a $1bn post-money valuation; between them the evidence shows zero repeat orders and zero confirmed non-POC paying deployments. Their bottlenecks, on this evidence, are not model quality — Humanoid already runs the same NVIDIA stack everyone else can buy, and hit 97% reliability at Ford Cologne over six weeks. The bottlenecks are that Schaeffler's binding commitment ramps to 2032, that the actuators and the factory both belong to other companies, and that the founder himself names Tesla, Agility and Figure as competitors while Neura closed over $1B in Germany. A 2032 ramp is not a market; it is an option on one.
+
+The corollary for Switzerland specifically: the ETH/EPFL pipeline is producing world-class perception-and-control teams at a rate that has made technical competence non-differentiating within this sample. Four of five companies come from the same two institutions and cluster at 3–4 on technology. If that is right, the scarce Swiss resource is not another lab spin-out — it is people who have shipped hardware fleets and know how to get a robot onto a Zone 1 site or inside an OEM's software. Verity bought that with D'Andrea's Kiva history; Humanoid hired it in Jarad Cannon; mimic, on public evidence, has neither, and it ranks last.
+
+What follows practically: value the certification and the customer's own press release, discount the pre-order book and the TAM slide. On this map, an announcement from Outokumpu's newsroom was worth more than $2.4B of self-reported pre-orders.
+
+## What would falsify it
+
+**The single strongest falsifier is Humanoid's Schaeffler agreement converting on schedule.** Schaeffler's own press office committed to first systems live in Germany before end-2026, with Beta robots reaching customer sites in Q4 2026, ramping to a four-digit unit count by 2032. If by mid-2027 Schaeffler, Bosch or Ford publish, on their own letterhead, named multi-site paying (non-POC) fleets — with unit counts — then general-purpose humanoids will have crossed from pilot to procurement roughly five years faster than the \"2032 ramp is an option, not a market\" claim assumes, and the capital allocation I called mispriced will look correctly early.
+
+**Gravis' capital-ahead-of-traction position paying off.** Gravis debuted its second-generation Copilot at CONEXPO in March 2026 following the $200M SoftBank round. If by end-2027 Flannery Plant Hire, Holcim or Kibag announce fleet-scale retrofit orders with disclosed unit counts and repeat purchases — rather than another \"UK-first trial\" at a Manchester Airport-type site — then traction lagged capital by design and the ordering logic here (traction leads, money follows) is too slow a read.
+
+**The certification moat proving shortcuttable.** If Boston Dynamics, Unitree or a Chinese entrant announces ATEX/IECEx Zone 1 certification for a legged platform before ANYmal X's full commercial launch, or if ANYbotics slips that 2026 launch again (it has already moved from a 2022 unveiling), the specific thing I identified as the sector's only real barrier is either copyable or too slow to monetise — and the thesis loses its anchor case.
+
+**Compliance cutting the other way.** Verity's FCC Covered List approval expires 31 December 2026. If it is not renewed and Verity loses US market access, then the \"regulation as moat\" reading needs replacing with \"regulation as random shock,\" and a certified position is not an asset but a liability with a renewal date.
+
+**A demonstrated flywheel.** If any company here publishes third-party-verifiable evidence that accumulated field data measurably improved model performance in a way competitors cannot replicate — ANYbotics' Data Navigator moving from pilot description to audited fleet-level performance gains, or mimic showing that U1 exoskeleton demonstration data yields policies FLUX-mimic competitors cannot match — then the model layer is not commodity and the ranking's technology scores were measuring the wrong thing.
+
+**Displacement at the top by a well-funded generalist.** If Neura Robotics (>$1B raised, Germany) reaches confirmed multi-site paying fleets in industrial settings before ANYbotics or Verity expand theirs, then raising big and going broad beats attaching narrowly, and the ordering here inverts.
+
+**An account loss.** If Gather AI (post-Ware Robotics acquisition) or Corvus displaces Verity at a named account — IKEA/Ingka, DSV, KeHE — then installed base without a technology moat is not sticky, which is the load-bearing assumption in ranking Verity second on a technology score of 3.
+
+## Where this method is weakest
+
+**Five companies, chosen to test the scoring method, cannot describe a sector.** Four are Swiss, one British. Three sit in inspection, warehousing and construction. There is no agriculture, surgical, defence, last-mile, or fixed-infrastructure AMR company in the set — which means the largest deployed Physical AI businesses in Europe by units and revenue are simply absent. An Exotec- or AutoStore-class company would almost certainly outrank ANYbotics on field traction, and Neura Robotics appears here only as a contradiction inside Humanoid's profile. Any statement about \"European Physical AI\" in this document is really a statement about these five and should be read that way.
+
+**The ranking reads public disclosure, not operations.** One search pass, no customer references called, no revenue, gross margin, churn, renewal rate, RaaS contract length or service cost visible for anyone. That matters most where it hurts the top: ANYbotics' and Verity's traction scores rest on deployments that are *announced*, and we cannot see what happens after. The only dead pilot in the whole map — Verity's original Maersk site in Miami — surfaced because a single outlet, Supply Chain Dive, went and asked. The base rate of quietly dead installations is invisible by construction, and it is the number that would most change the ranking.
+
+**Traction as measured rewards customers who publish.** ANYbotics scores 5 partly because Outokumpu, PETRONAS, Equinor and GE Vernova run press offices that name suppliers. A company selling equally real fleets to buyers under NDA — common in defence, pharma, semiconductors — would score 2 or 3 on identical underlying reality. This is a systematic bias, not noise, and it favours industrials-facing vendors over anyone selling into secretive procurement.
+
+**Field traction at 30% makes the ranking a snapshot of the present, not a forecast.** mimic was incorporated in April 2024; it cannot score well on units deployed and its 54 is not a prediction that it fails. The rubric measures deployed reality, which is the right thing to measure for a market map and the wrong thing to confuse with expected value. Readers looking for who wins in 2030 are reading the wrong instrument.
+
+**The double-count and the timing cap.** ANYbotics' ATEX certification earns credit twice — once as technology moat, once as dated timing unlock — which inflates the single most important fact in the set. Meanwhile timing is capped at 10 by design, so a company holding a genuine external regulatory deadline could gain at most 10 points from it; if such a mandate exists in any of these markets, this method structurally under-weights it.
+
+**The underlying record is unaudited and internally contradictory.** Even the best-evidenced company has no reconciled ledger: ANYbotics' headcount ranges 100–260 across sources and its funding total is variously $130M, $150M and €127M; Gravis' headcount is 26 or 55, and one tracker states SoftBank *acquired* the company while every financial outlet describes a minority investment; Tracxn places mimic in West Palm Beach, founded 2009. Confidence flags of HIGH in these profiles mean \"the evidence class is strong,\" not \"the numbers are verified.\"
+
+**Calibration bounds what the numbers mean.** Twelve of 25 criterion scores matched the blind hand-score, and rank order matched exactly — so the ordering survives the disagreement. But the model ran −5 notches on technology and −4 on market against the human, meaning the two most interpretive criteria are where reasonable scorers diverge most, and always in the direction of the model being stricter. Treat absolute scores as a floor. Treat 86 versus 85 as a tie. And note that a scorer who credited engineering depth and TAM narrative the way the hand-scorer did would compress this whole field — hand scores run 93, 92, 85, 77, 60 — into a much narrower band, which would weaken, though not reverse, the argument that traction is what separates these companies.
+
+---
+
+The limitations of the method are stated at greater length in
+[`00-scoping.md` §6](00-scoping.md#6-known-limitations).
