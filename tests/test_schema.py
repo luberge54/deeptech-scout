@@ -20,9 +20,18 @@ from schema import (  # noqa: E402
     EvidenceStatus,
     SourceType,
     build_criterion_record,
+    canonical_url,
     derive_confidence,
     normalise_evidence,
 )
+
+
+# Every URL make_item can produce, in canonical form. Real runs build this from the
+# pages step 1 retrieved; the tests need the same allow-list to exist.
+KNOWN_URLS = {
+    "https://example.com/a",
+    "https://example.com/real",
+}
 
 
 def make_item(
@@ -45,7 +54,7 @@ def test_job_postings_are_forced_to_indirect() -> None:
     items = [make_item(SourceType.JOB_POSTING, EvidenceGrade.DIRECT)]
 
     # Act
-    cleaned = normalise_evidence(items)
+    cleaned = normalise_evidence(items, KNOWN_URLS)
 
     # Assert - section 4c pins hiring signals to indirect regardless
     assert cleaned[0].evidence_grade is EvidenceGrade.INDIRECT
@@ -59,7 +68,7 @@ def test_claims_without_a_source_url_are_dropped() -> None:
     ]
 
     # Act
-    cleaned = normalise_evidence(items)
+    cleaned = normalise_evidence(items, KNOWN_URLS)
 
     # Assert
     assert len(cleaned) == 1
@@ -101,7 +110,7 @@ def test_found_with_no_usable_evidence_is_downgraded() -> None:
     )
 
     # Act
-    record = build_criterion_record(criterion)
+    record = build_criterion_record(criterion, KNOWN_URLS)
 
     # Assert - nothing survived the sourcing rules, so nothing was found
     assert record.evidence_status is EvidenceStatus.SEARCHED_NOT_FOUND
@@ -115,10 +124,76 @@ def test_not_searched_survives_the_record_build() -> None:
         evidence=[],
         not_found_notes="Search budget exhausted before patents were covered.",
     )
-    record = build_criterion_record(criterion)
+    record = build_criterion_record(criterion, KNOWN_URLS)
 
     assert record.evidence_status is EvidenceStatus.NOT_SEARCHED
     assert record.confidence is None
+
+
+def test_a_claim_citing_a_page_step_1_never_retrieved_is_dropped() -> None:
+    # Arrange - the real failure: asked for a URL it did not have, the model wrote a
+    # plausible-looking domain instead. All 50 ANYbotics claims looked like this.
+    items = [
+        make_item(SourceType.CUSTOMER_SIDE, source_url="outokumpu.com"),
+        make_item(SourceType.TRADE_PRESS, source_url="https://example.com/real"),
+    ]
+
+    # Act
+    cleaned = normalise_evidence(items, KNOWN_URLS)
+
+    # Assert - an invented source is worse than no claim, because it reads as audited
+    assert len(cleaned) == 1, cleaned
+    assert cleaned[0].source_url == "https://example.com/real"
+
+
+def test_a_trailing_slash_does_not_cost_a_real_source_its_place() -> None:
+    # Arrange - a genuine page, cited with one character of drift
+    items = [make_item(SourceType.TRADE_PRESS, source_url="https://Example.com/real/")]
+
+    # Act
+    cleaned = normalise_evidence(items, KNOWN_URLS)
+
+    # Assert - case and a trailing slash are noise, not a different page
+    assert len(cleaned) == 1, cleaned
+
+
+def test_a_different_path_on_a_known_host_is_still_rejected() -> None:
+    # Arrange - same site, page that was never retrieved. Normalising the host must
+    # not quietly widen the allow-list to a whole domain.
+    items = [make_item(SourceType.TRADE_PRESS, source_url="https://example.com/invented")]
+
+    # Act
+    cleaned = normalise_evidence(items, KNOWN_URLS)
+
+    # Assert
+    assert cleaned == [], cleaned
+
+
+def test_confidence_cannot_be_high_on_evidence_that_was_all_invented() -> None:
+    # Arrange - the shape that produced ANYbotics' five HIGH ratings: independent,
+    # direct, and every URL fabricated
+    criterion = CriterionEvidence(
+        evidence_status=EvidenceStatus.FOUND,
+        evidence=[
+            make_item(SourceType.CUSTOMER_SIDE, source_url="outokumpu.com"),
+            make_item(SourceType.TRADE_PRESS, source_url="petronas.com"),
+        ],
+        not_found_notes=None,
+    )
+
+    # Act
+    record = build_criterion_record(criterion, KNOWN_URLS)
+
+    # Assert - nothing survived, so the honest label is that nothing was found
+    assert record.evidence == []
+    assert record.evidence_status is EvidenceStatus.SEARCHED_NOT_FOUND
+    assert record.confidence is Confidence.LOW
+
+
+def test_canonical_url_leaves_a_meaningful_difference_alone() -> None:
+    # Arrange / Act / Assert - the query string can select the page, so it is kept
+    assert canonical_url("https://a.com/p?id=1") != canonical_url("https://a.com/p?id=2")
+    assert canonical_url("https://A.com/p/") == canonical_url("https://a.com/p")
 
 
 def main() -> None:

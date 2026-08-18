@@ -12,6 +12,7 @@ a paragraph the model is trusted to remember.
 """
 
 from enum import Enum
+from urllib.parse import urlsplit, urlunsplit
 
 from pydantic import BaseModel, Field
 
@@ -121,19 +122,51 @@ class CriterionRecord(BaseModel):
     not_found_notes: str | None
 
 
-def normalise_evidence(items: list[EvidenceItem]) -> list[EvidenceItem]:
+def canonical_url(url: str) -> str:
+    """Reduce a URL to a comparable form: lowercase host, no trailing slash.
+
+    The model is asked to copy URLs verbatim, but a stray trailing slash or a
+    capitalised host should not cost a real source its place in the record.
+    Nothing beyond case and that slash is normalised - a different path is a
+    different page, and treating it otherwise would defeat the check.
+    """
+    parts = urlsplit(url.strip())
+    return urlunsplit(
+        (
+            parts.scheme.lower(),
+            parts.netloc.lower(),
+            parts.path.rstrip("/"),
+            parts.query,
+            "",
+        )
+    )
+
+
+def normalise_evidence(
+    items: list[EvidenceItem], known_urls: set[str]
+) -> list[EvidenceItem]:
     """Drop unusable items and re-apply the source rules the model may have missed.
 
-    Two corrections are applied unconditionally, because they are project rules
+    Three corrections are applied unconditionally, because they are project rules
     rather than model judgement:
       * an item without a source URL is discarded - an unsourced claim is the
         exact failure mode this project exists to avoid;
+      * an item whose URL was not among the pages step 1 actually retrieved is
+        discarded. The step 1 findings document names its sources in prose rather
+        than by link, so a model asked for a URL will produce a plausible-looking
+        domain instead of admitting it has none. Such a claim reads as audited and
+        is not, which is worse than no claim at all;
       * a job posting is forced to `indirect` per section 4c.
+
+    `known_urls` holds the canonical form of every URL step 1 retrieved.
     """
     cleaned: list[EvidenceItem] = []
 
     for item in items:
         if not item.source_url or not item.source_url.strip():
+            continue
+
+        if canonical_url(item.source_url) not in known_urls:
             continue
 
         if item.source_type in ALWAYS_INDIRECT_SOURCE_TYPES:
@@ -166,14 +199,16 @@ def derive_confidence(
     return Confidence.HIGH if has_independent_direct else Confidence.MEDIUM
 
 
-def build_criterion_record(criterion: CriterionEvidence) -> CriterionRecord:
+def build_criterion_record(
+    criterion: CriterionEvidence, known_urls: set[str]
+) -> CriterionRecord:
     """Turn raw model output into the stored record, applying the rules above.
 
     A `found` status with no usable evidence left after cleaning is downgraded to
     `searched_not_found`: the model looked and reported something, but nothing
     survived the sourcing rules, so the honest label is that nothing was found.
     """
-    evidence = normalise_evidence(criterion.evidence)
+    evidence = normalise_evidence(criterion.evidence, known_urls)
 
     status = criterion.evidence_status
     if status is EvidenceStatus.FOUND and not evidence:

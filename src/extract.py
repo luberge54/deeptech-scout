@@ -21,6 +21,7 @@ from schema import (
     CRITERION_NAMES,
     ExtractionOutput,
     build_criterion_record,
+    canonical_url,
 )
 
 # docs/00-scoping.md section 4d: extraction is mechanical once the schema is
@@ -80,8 +81,11 @@ you cannot tell which of the two applies, choose `not_searched`.
 
 # Evidence rules
 
-- Every item needs a `source_url` taken from the report. Drop any claim the report does
-  not attach a URL to, however plausible it sounds.
+- Every item needs a `source_url` copied character for character from the source list
+  above. Do not shorten one to a bare domain, do not rebuild one from a company name,
+  and do not invent one. A URL that is not on that list is deleted before the record is
+  stored, and the claim goes with it - so if no listed page backs a claim, leave the
+  claim out rather than attaching the closest-looking URL.
 - `source_type` records who published it, not how convincing it is. A vendor-hosted case
   study is `vendor_case_study` even when it names a real customer.
 - `evidence_grade` is `direct` for a named customer, a unit count, a date, or a signed
@@ -96,6 +100,13 @@ you cannot tell which of the two applies, choose `not_searched`.
 Copy across every disagreement the report flags - figures that differ across sources, or
 claims that conflict. Do not resolve them. Reconciling contradictions is a judgement, and
 it belongs to the scoring step where it can be argued for.
+
+# The pages step 1 actually retrieved
+
+These are the only URLs you may cite. The report below names its sources in prose
+rather than by link, so match a claim to its page using the titles here.
+
+{sources}
 
 # The report
 
@@ -137,6 +148,31 @@ def budget_was_exhausted(stats: dict) -> bool:
     return searches_run is not None and searches_run == stats.get("search_budget")
 
 
+# Long enough to recognise a page, short enough that 135 of them stay cheap.
+MAX_SOURCE_TITLE_CHARS = 110
+
+
+def render_sources(sources: list[dict]) -> str:
+    """One line per retrieved page: the URL to copy, and the title to match it by."""
+    lines = []
+    for source in sources:
+        url = (source.get("url") or "").strip()
+        if not url:
+            continue
+        title = (source.get("title") or "").strip()[:MAX_SOURCE_TITLE_CHARS]
+        lines.append(f"- {url}  ({title})" if title else f"- {url}")
+    return "\n".join(lines)
+
+
+def known_urls(report: dict) -> set[str]:
+    """Canonical URLs of every page step 1 retrieved, as the allow-list for claims."""
+    return {
+        canonical_url(source["url"])
+        for source in report.get("sources", [])
+        if source.get("url")
+    }
+
+
 def build_prompt(report: dict) -> str:
     """Assemble the extraction prompt for one step 1 report.
 
@@ -146,6 +182,7 @@ def build_prompt(report: dict) -> str:
     return EXTRACTION_PROMPT.format(
         name=report["company"]["name"],
         findings=report["findings"],
+        sources=render_sources(report.get("sources", [])),
         budget_hint=(
             BUDGET_EXHAUSTED_HINT
             if budget_was_exhausted(report.get("run_stats", {}))
@@ -159,6 +196,13 @@ def extract_one(client: anthropic.Anthropic, slug: str) -> dict:
     report = load_report(slug)
     company = report["company"]
     budget_exhausted = budget_was_exhausted(report.get("run_stats", {}))
+
+    allowed_urls = known_urls(report)
+    if not allowed_urls:
+        sys.exit(
+            f"""FAIL: {slug} has no sources recorded, so no claim could be verified
+      against a real page. Re-run step 1 for this company."""
+        )
 
     print(f"\n[{slug}] extracting {company['name']}")
 
@@ -197,7 +241,9 @@ def extract_one(client: anthropic.Anthropic, slug: str) -> dict:
         sys.exit(f"FAIL: the model returned no parseable output for {slug}.")
 
     criteria = {
-        name: build_criterion_record(getattr(extracted, name)).model_dump()
+        name: build_criterion_record(
+            getattr(extracted, name), allowed_urls
+        ).model_dump()
         for name in CRITERION_NAMES
     }
 

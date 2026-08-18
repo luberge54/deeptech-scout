@@ -145,6 +145,57 @@ def test_already_extracted_reads_back_the_slug_it_wrote() -> None:
         assert done == {"mimic-robotics"}, done
 
 
+def test_render_sources_lists_each_url_with_its_title() -> None:
+    # Arrange
+    sources = [
+        {"url": "https://a.com/p", "title": "Page A"},
+        {"url": "https://b.com/q", "title": "Page B"},
+    ]
+
+    # Act
+    rendered = extract.render_sources(sources)
+
+    # Assert - the model needs the URL to copy and the title to match a claim by
+    assert "https://a.com/p" in rendered
+    assert "Page B" in rendered
+    assert len(rendered.splitlines()) == 2, rendered
+
+
+def test_render_sources_skips_an_entry_with_no_url() -> None:
+    # Arrange - a title with nothing to cite is not a usable source
+    sources = [{"title": "No link here"}, {"url": "https://a.com/p", "title": "Real"}]
+
+    # Act
+    rendered = extract.render_sources(sources)
+
+    # Assert
+    assert rendered.splitlines() == ["- https://a.com/p  (Real)"], rendered
+
+
+def test_known_urls_canonicalises_what_step_1_stored() -> None:
+    # Arrange - step 1 records URLs as returned by search, casing and slashes included
+    report = {"sources": [{"url": "https://Example.com/Path/"}, {"url": ""}]}
+
+    # Act
+    allowed = extract.known_urls(report)
+
+    # Assert - one usable entry, in the form the evidence check compares against
+    assert allowed == {"https://example.com/Path"}, allowed
+
+
+def test_the_prompt_carries_the_source_list() -> None:
+    # Arrange - without this the model has no URL to copy and invents one, which is
+    # exactly how the first ANYbotics record ended up with 50 fabricated domains
+    report = make_report()
+    report["sources"] = [{"url": "https://a.com/p", "title": "Page A"}]
+
+    # Act
+    prompt = extract.build_prompt(report)
+
+    # Assert
+    assert "https://a.com/p" in prompt
+
+
 def main() -> None:
     tests = [value for name, value in globals().items() if name.startswith("test_")]
     failures = 0
