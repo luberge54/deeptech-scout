@@ -1,0 +1,202 @@
+{
+  "company": {
+    "name": "ANYbotics",
+    "country": "Switzerland",
+    "city": "Zurich",
+    "website": "anybotics.com",
+    "description": "legged robots for industrial inspection",
+    "slug": "anybotics"
+  },
+  "collected_at": "2026-08-18T13:24:57.659499+00:00",
+  "model": "claude-sonnet-5",
+  "pipeline_step": 1,
+  "findings": "Good, I have the parsed data from 6 queries with full content. Let me check if `res2` has any partial data too, then extract the useful content.\nI have 45 unique sources already fetched with full content. Let me extract and review the content of the most important ones for each evidence category.\n# ANYbotics — Public Evidence Summary\n\n*Note on method: search results below come from company materials, trade press, funding-related third-party coverage, and live job postings retrieved directly. I was not able to complete dedicated searches on patents and a systematic competitor list due to a search-tool cap reached mid-session — these gaps are flagged explicitly below rather than filled in.*\n\n## Field traction\n\n**Aggregate unit/deployment numbers (company claim, repeated in third-party funding coverage):**\n- In a TechCrunch report on the company's Series B extension, \nin the 18 months since raising the first tranche of the Series B, the Zürich-based startup said it had doubled the number of units sold, with close to 200 robots deployed across the oil and gas, mining, power, utilities, and metals industries\n (techcrunch.com, Dec 12, 2024).\n- Roughly nine months later, coverage of a Climate Investment round put the figure only slightly higher: \nmore than 200 ANYmal units have been shipped, performing thousands of inspections each week across oil and gas, mining, power, utilities, and metals\n (tech.eu, Sept 22, 2025); nearly identical wording appears in Climate Investment's own release and in StartupTicker's coverage of the same round (climateinvestment.com; startupticker.ch, Sept 2025). Label: **DIRECT company-sourced figure, repeated near-verbatim across multiple outlets** — treat as one data point, not independent confirmation.\n\n**Named customers (DIRECT):**\n- TechCrunch's Series B article names specific buyers: \ncustomers include Novelis (aluminum rolling and recycling), Iamgold (gold mining), Stelco (steel milling), and Stanford University, which uses Anybotics for \"advanced research purposes\"\n. It also quotes CEO Fankhauser on order sizes: \n\"Our customers deploy anywhere from a single robot to fleets exceeding 10 robots, with the largest customer orders close to 20 robots\"\n (techcrunch.com, Dec 12, 2024).\n- A Climate Investment/tech.eu article states \nANYbotics is already deployed with several CI Limited Partners, including BP, Equinor, Eni, and Petrobras, and with customers and partners including SLB, Siemens Energy, Siemens AG, GE Vernova, Novelis, Outokumpu, AWS, SAP, Yokogawa, and NVIDIA\n (tech.eu, Sept 22, 2025). This is a company-supplied list published by a third party, not independent verification by each named customer.\n\n**Site-specific / trade-press evidence (mixed DIRECT/INDIRECT):**\n- The Robot Report (trade press) reported in 2022 that \nthe robot is currently on deployment at a PETRONAS offshore platform in Malaysia, where the companies are focusing on integration to existing workflow and scale-up\n (therobotreport.com, Sept 2022). A separate oil & gas trade magazine (OGV Energy, via Issuu) reports that \nANYmal X was unveiled together with PETRONAS at OTC Asia in Malaysia on March 22, 2022\n and that \nPETRONAS and ANYbotics signed a commercial agreement to scale ANYmal X deployments to their upstream and downstream facilities\n — a named customer with a dated, signed agreement.\n- On Petrobras: ANYbotics' own release states \na long-term pilot is planned for 2024 and aimed at improving maintenance by optimizing onboard man-hours required for inspections\n for FPSO vessels — labeled by the company as a **pilot**, not a completed commercial rollout.\n- An AI trade-press piece on the Climate Investment round describes a specific site: \nat the Northern Lights carbon‑capture and storage project in Norway, a joint venture of Equinor, TotalEnergies and Shell, an ANYmal patrols a normally uncrewed site, monitors CO₂ concentrations and reports anomalies to operators\n (theaiinsider.tech, Sept 23, 2025) — a named, dated site, but sourced from the company/CI announcement rather than an independent operator statement.\n- A third-party startup-profile site claims \nas of July 2023, ANYbotics has 110 customers, including Stadler, Vale, Petronas, Equinor, Siemens Energy, Eni, Schneider Electric, and W. R. Grace and Company\n (boringbusinessnerd.com) — this is an aggregator site, and I could not confirm the primary source for the \"110 customers\" figure.\n\n**Vendor-hosted case studies naming customers (labeled by company as evaluations/pilots, not confirmed as paid deployments):**\n- BASF (Ludwigshafen, Germany): ANYbotics' own case study quotes BASF personnel by name, e.g. Automation Manager Peter Welter on ANYmal X: \n\"For a first time, ANYmal X closes an important technical gap, conducting automated inspections in very complex environments, with stairs and tight passages, and this in combination with Ex-zones, that's a novelty!\"\n The company describes the relationship as an evaluation: \nBASF collaborates with ANYbotics to evaluate the potential of automated condition monitoring and digital documentation of operational data at their facilities\n (anybotics.com, July 2024).\n- Outokumpu: quoted at ANYbotics' own 2024 industry forum: \n\"The primary benefit of conducting regular missions with ANYmal is minimizing our employees' exposure to hazardous environments\" – Thorsten Piniek, Vice President Health and Safety, Outokumpu\n, alongside customers \nfrom companies such as Novelis, DSM-Firmenich, SLB, Siemens AG, GMV, and Outokumpu\n who shared results at the event (anybotics.com). This is a vendor-organized conference, so testimonials are company-curated even though customers are named.\n- SAP's own news site (third-party but likely sourced from an ANYbotics interview) reports an unnamed customer: \none offshore wind customer... has used ANYmal to manage all inspections and has eliminated the need to send personnel to a remote platform for months\n (news.sap.com) — **INDIRECT**, customer not named.\n\n**Job postings as an indicator of active field operations (INDIRECT but consistent with real deployments):**\nANYbotics currently has multiple field-facing openings, including a Zurich-based \nDeployment Engineer in Robotics\n role where staff \nwork directly with customers around the globe to ensure the seamless installation and operation of ANYmal robots\n, requiring travel \nup to 80%\n of the time, plus Barcelona-based \"(Senior) Field Engineer\" and \"Field Deployment Technician\" roles (jobs.lever.co). These postings are consistent with an active fleet requiring on-site commissioning, not a research-only operation.\n\n## Team and execution\n\n- **Origins**: ANYmal's lineage traces to ETH Zurich robotics research. A robotics reference site states \nANYmal is a quadrupedal robot developed at ETH Zurich, Switzerland, by researchers from the Robotic Systems Lab and the Autonomous Systems Lab, with Marco Hutter and colleagues as key authors and designers\n, introduced \naround 2016 as a successor to earlier legged platforms like ETH's StarlETH\n, and later \nfielded in demanding scenarios such as the NCCR Robotics search-and-rescue grand challenge and the ARGOS oil and gas site inspection challenge\n.\n- **Founders named**: TechCrunch photo captions identify \nCFO Fredrik Isler... with CEO Péter Fankhauser\n (techcrunch.com).\n- **Headcount**: A current job listing states the company has \na highly talented and motivated team of more than 190 people\n (startup.jobs; identical wording on builtin.com).\n- **Product generations** (per a robotics reference site): after the original 2016 research platform and a \"ruggedized and waterproof\" second generation, \nwith new actuators and vision system, this was the first ANYmal to be commercialized and deployed offshore\n (ANYmal B), then \nfor the first time, ANYmal C introduced rugged industrial design, powerful actuation, 360° vision, and autonomous docking\n, followed by ANYmal D, described as \ndesigned for rugged operation, ANYmal D performed autonomous inspections at industrial facilities\n, and finally ANYmal X, \ncertified for use in dangerous environments, this version brought autonomous inspection to oil, gas, and chemicals operations\n (robotsguide.com).\n- **Dated commercial milestones (company-published)**: \nSeptember 28, 2022 – ANYbotics opens commercial orders for ANYmal X to provide industry-wide access to scalable robotic inspection solutions in Oil & Gas and Chemicals\n, with \nover 500 ANYmal X units already reserved\n at that time (anybotics.com). First ANYmal C customer deliveries were announced by the company in an article titled \"First ANYmal C Legged Robot Customer Deliveries\" (anybotics.com, dated April 2024 in search metadata).\n- **Funding (context only, not traction per the brief)**: Robot Report notes an earlier \n$22.3 million Series A round\n; TechCrunch reports the company \nhas now raised $130 million since its inception, and with a fresh $60 million in the bank\n as of Dec 2024, followed by a further Climate Investment-led round that AI Insider reports \nlifts the Zurich‑based company's total funding to more than $150 million\n (Sept 2025).\n\n## Technology\n\n- **In-house software claim**: A company job posting states \nthe software enabling ANYmal to perform autonomous inspection missions is almost exclusively developed in-house\n (builtin.com) — this is a company claim, not independently verified.\n- **Hardware/sensing specs (company-published)**: current ANYmal is described as navigating \nsafely and precisely with a 360° Lidar, 6 depth cameras, and 2 optical tele-operation cameras\n, with \nprecise temperature readings in a range of -40–550°C without physical interaction\n (anybotics.com). A December 2022 update added gas sensing: \nANYmal's new gas sensor suite monitors concentration levels for combustible and toxic gases in industrial facilities in real-time\n (anybotics.com).\n- **Certification**: ANYmal X is marketed as \nthe world's first Ex-proof legged robot\n, intended for \nsafe usage in hazardous and potentially explosive environments\n (anybotics.com). This maps to ATEX/IECEx explosive-atmosphere certification referenced across the chemicals and oil & gas industry pages (anybotics.com/industries/robotic-inspection-for-chemicals/, /robotic-inspection-for-oil-gas/).\n- **Third-party academic reference**: An independent arXiv paper on robot navigation testing describes ANYmal as \na quadrupedal platform built for autonomous inspection and monitoring in complex industrial environments\n, noting its current commercial version \nincludes a 360° LiDAR for mapping and obstacle detection, wide-angle front and rear cameras for navigation, and six depth cameras for all-around terrain perception\n (arxiv.org/pdf/2510.09396) — independent confirmation of hardware description, not of deployment numbers.\n- **Patents**: No evidence found. I did not complete a dedicated patent search due to a search-tool limit reached mid-session; this remains unverified either way.\n\n## Market\n\n- **Named buyer industries** (company/press-sourced): oil & gas, mining, power, utilities, metals are repeatedly named as the customer base (tech.eu, startupticker.ch, climateinvestment.com, Sept 2025), plus chemicals (BASF, W.R. Grace) and one academic user (Stanford University, per TechCrunch).\n- **Named individual buyers/partners across sources**: Novelis, Iamgold, Stelco, Stanford (TechCrunch); BP, Equinor, Eni, Petrobras, SLB, Siemens Energy, Siemens AG, GE Vernova, Outokumpu, AWS, SAP, Yokogawa, NVIDIA (tech.eu); PETRONAS (Robot Report, OGV/Issuu); BASF (multiple anybotics.com case studies); Stadler, Vale, Schneider Electric (boringbusinessnerd.com, unverified primary source).\n- **Competitors named**: One funding-news aggregator states \ncompetitors in the industrial automation space include Siemens Energy and GE Vernova\n (startuphub.ai). Note this directly conflicts with tech.eu's characterization of Siemens Energy and GE Vernova as ANYbotics **customers/partners** rather than competitors — flagged below as a contradiction. No other explicit named-competitor list (e.g., Boston Dynamics) was found in the sources retrieved.\n- **Budget line / commercial model**: The company markets a \"Robot-as-a-Service\" model — \noperators leverage ANYmal X to optimize risk-based inspections at extraction and processing facilities\n — positioned against existing inspection/maintenance spend rather than a newly created budget category; this is company framing, not independently confirmed.\n\n## Timing\n\n- **ANYmal X Ex-certification (2022)**: The company frames this as removing a structural blocker for oil & gas/chemicals adoption: \nlarge areas of chemical plants are classified as Zone 1 and require certified equipment to avoid potential ignition or hot permits\n, and \nSeptember 28, 2022 – ANYbotics opens commercial orders for ANYmal X to provide industry-wide access to scalable robotic inspection solutions in Oil & Gas and Chemicals\n.\n- **PETRONAS/OTC Asia (March 22, 2022)**: launch event with a signed commercial agreement, per OGV Energy trade coverage, cited above.\n- **Climate Investment round (Sept 22, 2025)**: tied explicitly to decarbonization mandates — the investor is described as \nfounded by member companies of the Oil & Gas Climate Initiative (\"OGCI\")\n, and the release states ANYmal X \nwill be brought to market in 2026 to enable safe, continuous inspection in explosive zones\n.\n- No evidence found for a specific regulatory mandate (e.g., a government safety rule) forcing adoption; the \"timing\" evidence found is about product certification and investor mandates, not external regulation.\n\n## Contradictions and gaps\n\n- **Stalled/reused unit count**: The \"~200 units shipped\" figure appears in Dec 2024 (TechCrunch: \"close to 200\") and is still \"over/more than 200\" in Sept 2025 releases (tech.eu, StartupTicker, Climate Investment, AI Insider) — roughly nine months of press coverage with almost no change in the headline number. This may reflect real plateauing, or simply that press materials recycled the same rounded figure; the sources do not let me distinguish between these.\n- **Customer count vs. unit count not reconciled**: boringbusinessnerd.com's claim of \"110 customers\" (July 2023) cannot be cross-checked against the ~200-unit figure from later 2024/2025 sources, and I could not identify the primary source behind that customer count.\n- **Competitor list conflicts**: startuphub.ai names Siemens Energy and GE Vernova as competitors, while tech.eu's Climate Investment coverage lists both as ANYbotics customers/partners. I cannot resolve this discrepancy from the sources gathered.\n- **Pilots vs. deployments blurred**: Several of the strongest-sounding \"case studies\" (BASF, Petrobras) are explicitly described by the company itself as evaluations or pilots, not confirmed paid, at-scale rollouts. Only the TechCrunch-reported figures (Novelis, Iamgold, Stelco, Stanford; fleet orders up to ~20 robots) read as confirmed commercial deployments, and even those are self-reported by the CEO to a journalist rather than confirmed by the customers themselves.\n- **No customer-side (buyer-issued) press release, tender record, or regulatory filing was found** naming ANYbotics/ANYmal. Everything above originates from ANYbotics itself, funding-adjacent press coverage, or vendor-hosted case studies quoting named customer staff — I did not find an independent announcement from, e.g., Petrobras, PETRONAS, Equinor, or BASF's own newsroom confirming these programs.\n- **Patents and a systematic competitor landscape**: not searched due to a mid-session search-tool cap; genuinely open gaps, not \"no evidence found\" in the confirmed sense.\n- **Pricing, contract values, and specific site inspection counts**: no evidence found for any of these; not mentioned in any source retrieved.",
+  "sources": [
+    {
+      "url": "https://www.anybotics.com/news/first-anymal-customer-deliveries/",
+      "title": "First ANYmal C Legged Robot Customer Deliveries - ANYbotics"
+    },
+    {
+      "url": "https://www.anybotics.com/news/anymal-onboarding-for-successful-deployments/",
+      "title": "Comprehensive ANYmal Onboarding Ensures Successful Robot Deployments"
+    },
+    {
+      "url": "https://www.therobotreport.com/anybotics-opens-commercial-order-for-anymal-quadruped/",
+      "title": "ANYbotics opens commercial orders for ANYmal quadruped - The Robot Report"
+    },
+    {
+      "url": "https://www.startupticker.ch/en/news/anybotics-raises-additional-usd-20-million",
+      "title": "ANYbotics raises additional USD 20 million"
+    },
+    {
+      "url": "https://www.anybotics.com/get-started/onboarding/",
+      "title": "Autonomous industrial robot ANYmal onboarding - ANYbotics"
+    },
+    {
+      "url": "https://www.anybotics.com/get-started/",
+      "title": "Get started with ANYMal - ANYbotics"
+    },
+    {
+      "url": "https://developer.siemens.com/anybotics/overview.html",
+      "title": "ANYbotics - Overview - developer.siemens.com"
+    },
+    {
+      "url": "https://www.anybotics.com/news/anymal-product-update-december-2022/",
+      "title": "ANYmal Product Update December 2022 - ANYbotics"
+    },
+    {
+      "url": "https://robotsguide.com/robots/anymal",
+      "title": "ANYmal - ROBOTS: Your Guide to the World of Robotics"
+    },
+    {
+      "url": "https://builtin.com/job/deployment-engineer-robotics/3720466",
+      "title": "Deployment Engineer / Robotics"
+    },
+    {
+      "url": "https://www.anybotics.com/news/anymal-case-basf-chemical-plant/",
+      "title": "Automation and digitalization with ANYmal the case at BASF - ANYbotics"
+    },
+    {
+      "url": "https://www.anybotics.com/industries/robotic-inspection-for-chemicals/",
+      "title": "Robotic inspection for chemicals industries - ANYbotics"
+    },
+    {
+      "url": "https://www.anybotics.com/news/aif2024-collaboratively-pushing-industrial-inspections/",
+      "title": "AIF 2024 – Collaboratively Pushing the Boundaries of Industrial Inspections"
+    },
+    {
+      "url": "https://arxiv.org/pdf/2510.09396",
+      "title": "Bridging Research and Practice in Simulation-based Testing of Industrial Robot Navigation Systems"
+    },
+    {
+      "url": "https://www.anybotics.com/robotics/anymal/",
+      "title": "ANYmal - Autonomous Robotic Inspection Solution - ANYbotic"
+    },
+    {
+      "url": "https://news.sap.com/2026/03/anybotics-industrial-inspections-into-business-insights/",
+      "title": "How Swiss Robotics Company ANYbotics and SAP Are Turning Dirty, Dusty, and Dangerous Industrial Inspections into Business Insights"
+    },
+    {
+      "url": "https://www.blackscarab.ai/insights/anybotics-anymal-industrial-inspection-robot-guide",
+      "title": "ANYbotics ANYmal Deep Dive: Industrial Inspection Robots for Energy, Mining, Chemicals, and Heavy Industry | Black Scarab"
+    },
+    {
+      "url": "https://www.anybotics.com/news/anymal-x-basf-ludwigshafen-deployment/",
+      "title": "ANYmal X Tested for Autonomous Robot Inspections in Ex-zones at BASF"
+    },
+    {
+      "url": "https://www.anybotics.com/robotics/",
+      "title": "Automate industrial inspection with ANYmal - ANYbotics"
+    },
+    {
+      "url": "https://www.startuphub.ai/ai-news/funding-round/2025/anybotics-secures-over-e127-million-for-robotics-expansion/",
+      "title": "ANYbotics Secures Over €127 Million for Robotics Expansion"
+    },
+    {
+      "url": "https://tech.eu/2025/09/22/climate-investment-backs-anybotics-to-advance-industrial-decarbonization/",
+      "title": "Climate Investment backs ANYbotics to advance industrial decarbonization - Tech.eu"
+    },
+    {
+      "url": "https://www.therobotreport.com/tag/anybotics/",
+      "title": "ANYbotics Archives - The Robot Report"
+    },
+    {
+      "url": "https://techcrunch.com/2024/12/12/anybotics-raises-60m-to-scale-autonomous-industrial-robots-in-the-u-s/",
+      "title": "Anybotics raises $60M to bring more autonomous industrial robots to the US | TechCrunch"
+    },
+    {
+      "url": "https://theaiinsider.tech/2025/09/23/anybotics-total-funding-at-150-million-after-climate-investments-joins-to-scale-autonomous-inspection-in-hazardous-sites/",
+      "title": "ANYbotics Total Funding at $150 Million after Climate Investments Joins to Scale Autonomous Inspection in Hazardous Sites"
+    },
+    {
+      "url": "https://robotsguide.com/robots/anymal-2016",
+      "title": "ANYmal (2016) - ROBOTS: Your Guide to the World of Robotics"
+    },
+    {
+      "url": "https://www.climateinvestment.com/news/climate-investment-ci-joins-investment-in-anybotics-to-transform-oil-gas-inspection-through-autonomous-robotics",
+      "title": "Climate Investment (CI) Joins Investment in ANYbotics to Transform Oil & Gas Inspection Through Autonomous Robotics - Climate Investment"
+    },
+    {
+      "url": "https://techcrunch.com/?p=2927690",
+      "title": "Anybotics founders: CFO Fredrik Isler (L) with CEO Péter Fankhauser"
+    },
+    {
+      "url": "https://www.anybotics.com/news/anybotics-introduces-end-to-end-robotic-inspection-solution/",
+      "title": "ANYbotics Introduces End-to-End Robotic Inspection Solution - ANYbotics"
+    },
+    {
+      "url": "https://www.anybotics.com/",
+      "title": "Autonomous robotic inspection solutions - ANYbotics"
+    },
+    {
+      "url": "https://www.siemens.com/en-us/ecosystem/anybotics/",
+      "title": "ANYbotics | Siemens"
+    },
+    {
+      "url": "https://www.boringbusinessnerd.com/startups/anybotics",
+      "title": "ANYbotics - Company Profile"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=7RqD70F1gdo",
+      "title": "Meet the Startup: ANYbotics Revolutionizing Industrial Inspection with AI-Powered Autonomous Robots - YouTube"
+    },
+    {
+      "url": "https://issuu.com/kenny.dooley/docs/ogv_issue_55_-_web_v1/s/15331709",
+      "title": "ANYbotics: ANYmal X —Transforming Inspection in Oil & Gas and Chemicals - Issuu"
+    },
+    {
+      "url": "https://www.anybotics.com/robotics/anymal-x/",
+      "title": "ANYmal X - Ex-proof inspection robot - ANYbotics"
+    },
+    {
+      "url": "https://www.anybotics.com/industries/robotic-inspection-for-oil-gas/",
+      "title": "Automated Robotics Solutions for Oil & Gas - ANYbotics"
+    },
+    {
+      "url": "https://www.anybotics.com/news/anymal-x-the-worlds-first-ex-proof-legged-robot/",
+      "title": "ANYmal X — The World’s First Ex-Proof Legged Robot - ANYbotics"
+    },
+    {
+      "url": "https://www.anybotics.com/news/anymal-x-commercial-launch-sprint-conference/",
+      "title": "World’s Only Scalable Ex-proof Robot Inspection Solution Now Available to Industry"
+    },
+    {
+      "url": "https://www.anybotics.com/news/petrobras-and-anybotics-join-efforts-to-automate-offshore-fpso-inspections/",
+      "title": "Petrobras and ANYbotics Join Efforts to Automate Offshore FPSO Inspections"
+    },
+    {
+      "url": "https://www.anybotics.com/industries/",
+      "title": "Automate inspection across industries - ANYbotics"
+    },
+    {
+      "url": "https://startup.jobs/deployment-engineer-robotics-anybotics-4303030",
+      "title": "Deployment Engineer / Robotics at ANYbotics"
+    },
+    {
+      "url": "https://jobs.lever.co/anybotics/0bd2a37b-abaa-4edf-a263-0f342e37677e",
+      "title": "ANYbotics - (Senior) Field Engineer"
+    },
+    {
+      "url": "https://jobs.lever.co/anybotics/1a1e5408-cd9a-4b0c-8869-28412a05c80d",
+      "title": "ANYbotics - Field Deployment Technician, Industrial Robotics"
+    },
+    {
+      "url": "https://jobs.lever.co/anybotics/e14b4ce2-f5b3-4f9e-b8f0-bf4c7e0399c8",
+      "title": "ANYbotics - Deployment Engineer / Robotics"
+    },
+    {
+      "url": "https://startup.jobs/company/anybotics",
+      "title": "ANYbotics Jobs (August 2026)"
+    },
+    {
+      "url": "https://jobs.lever.co/anybotics",
+      "title": "ANYbotics jobs"
+    }
+  ],
+  "run_stats": {
+    "searches_run": 12,
+    "input_tokens": 255341,
+    "output_tokens": 21303,
+    "stop_reason": "end_turn"
+  }
+}
