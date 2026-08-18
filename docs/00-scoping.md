@@ -291,7 +291,53 @@ Three observations from the hand-scoring pass, recorded before seeing any model 
 
 Stated upfront, not discovered by the interviewer.
 
-- TBD
+**A search budget manufactures absence.** The first ANYbotics collection ran with a budget of 12
+searches and concluded that no customer-side press release, tender record, or regulatory filing
+named the company. Re-run at 20 with the same prompt, it found four — Outokumpu, PETRONAS,
+Equinor, GE Vernova — plus patent data it had previously reported as unsearched. Under §4b that
+difference is not cosmetic: absent evidence caps a score at 2, so **the search budget was an input
+to the ranking, not only to the cost.** Two mitigations are in place: the budget is now 20, and
+step 2 records `searched_not_found` separately from `not_searched` so that only genuine absence
+triggers the cap. Neither proves sufficiency — 20 searches are still fully consumed on data-rich
+companies, so the ceiling may still bind on the largest ones. Every capped score should be read as
+*not found within 20 searches*, never as *does not exist*.
+
+**Confidence measures the kind of source, not the weight of the evidence.** It is computed in
+Python, not asked of the model: HIGH requires at least one direct claim from an independent source
+(customer-side, tender record, or trade press), MEDIUM is everything else with evidence, LOW is
+absence. This makes §4b enforceable and removes run-to-run drift, at a stated cost — one
+independent source and six both return HIGH. Confidence here answers *who said it*, not *how much
+of it there is*.
+
+**Public evidence only.** No interviews, no customer references, no proprietary databases. This
+favours companies that publicise well over companies that deploy well — exactly the confusion §3b
+sets out to avoid. Searching customer-side sources rather than vendor announcements (§4c) reduces
+the bias; it does not remove it. The step 1 prompt also does not explicitly request German-,
+French-, or Italian-language sources, which matters for a panel centred on Switzerland. Whether
+that changes coverage materially has not been measured.
+
+**Errors in step 1 are invisible to step 3.** The scoring model never sees the web — it scores the
+evidence document that collection produced. A source that was missed, or misread, propagates
+silently into the ranking with no mechanism downstream to catch it. The audit trail exists (every
+claim carries its URL) but auditing it is a manual act, not an automated check.
+
+**The ranking is a snapshot, and the panel moves faster than the snapshot.** Gravis Robotics went
+from near-zero public coverage to a $200M SoftBank round announced 2026-08-17 — during the
+scoping work itself. Any score in this report is a statement about the evidence available on its
+collection date, which is recorded per company.
+
+**The calibration set is five companies scored by one person.** It measures agreement between a
+hand-scorer and the model, not correctness of either. Two of the five have also lost the property
+they were chosen to test: Humanoid no longer isolates funding-versus-traction, and Gravis no
+longer tests the coverage floor (§5). mimic robotics is the only functioning missing-evidence test
+left, so the missing-evidence machinery rests on a sample of one.
+
+**A quarter of the weight sits on criteria that barely separate the panel.** Timing is capped at 10
+because the "why now" is identical sector-wide (§3b) — that is deliberate. Market at 15 was
+expected to discriminate and, on the calibration set, did not: four of five companies scored 5.
+Together that is 25 points of 100 doing little ranking work, which concentrates the real
+discrimination in traction and team. Raising the Market bar is a change to consider after the full
+run, not mid-flight.
 
 ---
 
