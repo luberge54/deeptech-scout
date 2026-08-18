@@ -6,17 +6,14 @@ __pycache__/
 # Secrets — never commit
 .env
 
-# Collected data and generated reports. Note the trailing /* on data/raw:
-# git cannot re-include a file whose parent directory is itself excluded, so
-# excluding the contents rather than the directory is what makes the exception
-# below possible.
-data/raw/*
+# Collected data and generated reports. data/raw is step 2's input directory -
+# it is globbed, so nothing that is not a company report may live there.
+data/raw/
 data/output/
 
-# Exception: the discarded 12-search ANYbotics run. It is the primary evidence
-# that a tight search budget manufactures absence (docs/00-scoping.md section 6),
-# so it is version-controlled while every other collected file is not.
-!data/raw/anybotics.first-run-12-searches.json
+# data/archive is deliberately NOT ignored: it holds evidence kept on purpose,
+# such as the discarded 12-search ANYbotics run behind section 6 of the scoping
+# doc. It is never read by the pipeline.
 
 # IDE / OS
 .vscode/
