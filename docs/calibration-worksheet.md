@@ -93,14 +93,18 @@ Site: anybotics.com
 
 | Criterion | Score /5 | Confidence | One-line justification | Weighted |
 |-----------|----------|------------|------------------------|----------|
-| Field traction (30) | | H / M / L | | |
-| Team / execution (25) | | | | |
-| Technology (20) | | | | |
-| Market (15) | | | | |
-| Timing (10) | | | | |
-| **Total** | | | | **/100** |
+| Field traction (30) | 5 | M | Repeat orders across major named accounts (Petrobras, BP, Equinor, Yokogawa) plus a fleet in continuous 24/7 use at Outokumpu — clear past-pilot-into-fleet signal. No per-site unit count confirmed, so M rather than H. | 30 |
+| Team / execution (25) | 4 | H | ETH Zurich (RSL) spin-off — pedigree alone caps at 3 — but four product generations shipped (V1 → C → D → X) with an accelerating cadence pushes above the pedigree cap. | 20 |
+| Technology (20) | 5 | H | Proprietary ANYdrive actuators (not off-the-shelf) plus a world-first Ex (explosion-proof) certification — a multi-year certification moat, matching the top anchor directly. | 20 |
+| Market (15) | 5 | H | Existing budget line, quantified pain (documented cost-of-downtime avoidance), live 2026 purchases across several major accounts — meets the top-anchor conditions cleanly. No concrete evidence of a crowded/competitive market was found in research, so no discount is applied — the earlier 4 was an unsupported assumption. | 15 |
+| Timing (10) | 4 | H | 2026 Ex certification is a dateable regulatory unlock (opens explosion-risk zones previously inaccessible), not just riding the general Physical AI wave — above the 3 default, short of a full 5. | 8 |
+| **Total** | | | | **93/100** |
 
-Notes:
+Notes: ~200 robots deployed internationally; named deployments span cement (Vigier), oil & gas
+(Petrobras, BP/Aker, Equinor), steel (Outokumpu), and a software integration partnership
+(Yokogawa, Feb 2026). Founded 2016 out of ETH Zurich's Robotic Systems Lab; hardware sold since
+2017. Hiring mix (field engineers + manufacturing/quality engineers alongside RL researchers)
+confirms both active deployment and continued R&D.
 
 ---
 
@@ -110,14 +114,19 @@ Site: thehumanoid.ai
 
 | Criterion | Score /5 | Confidence | One-line justification | Weighted |
 |-----------|----------|------------|------------------------|----------|
-| Field traction (30) | | H / M / L | | |
-| Team / execution (25) | | | | |
-| Technology (20) | | | | |
-| Market (15) | | | | |
-| Timing (10) | | | | |
-| **Total** | | | | **/100** |
+| Field traction (30) | 4 | H | Weighs both sides: fleet today is still pilot-phase (dozens of units), but the Schaeffler contract is substantial and dated (thousands of units, live production targeted end-2026, binding commitment) — not just a vague future promise. The 4 balances a solid contractual signal against a still-limited real deployment, short of the 5 anchor (fleet in daily service). | 24 |
+| Team / execution (25) | 4 | H | Sokolov scaled a family manufacturing business to $1B and Bosch is contract-manufacturing the robots — real industrial depth even without prior *robotics-specific* hardware shipped. Alpha → Beta cadence (~14 months) judged sufficient for a shortening-cycle signal. | 20 |
+| Technology (20) | 3 | M | No proprietary moat identified — no custom actuator, no certification, no data flywheel cited. Wheeled platform and layered software stack are pragmatic engineering choices, but the approach is broadly available among humanoid competitors. M confidence since absence of evidence isn't confirmed absence. | 12 |
+| Market (15) | 5 | H | Large segment (manufacturing automation), existing budget line at Schaeffler, live purchase already happening (signed contract, production starting end 2026) — cleanly meets the top-anchor conditions. No concrete crowding evidence found in research; the earlier cap to 4 (for cross-company consistency) is corrected back to 5. | 15 |
+| Timing (10) | 3 | M | No specific dateable regulatory or component-price trigger found — rides the general 2025–26 humanoid + generative-AI wave. M rather than H since this is an absence-of-evidence call, not a confirmed absence. | 6 |
+| **Total** | | | | **77/100** |
 
-Notes:
+Notes: Schaeffler deal (May 2026) is the dominant signal — thousands of units over 5 years, live
+manufacturing ops in Germany targeted by end-2026. Bosch as contract manufacturer is a strong
+production-scale credibility marker. Siemens is a test/pilot site, less commercial than
+Schaeffler. HMND 01 Alpha (Sept 2025, wheeled, 7-month build) → HMND 01 Beta (production-intent,
+end 2026, built by Bosch); bipedal variant in parallel R&D only. Deployment-engineer hiring spans
+UK and Cambridge, MA — suggests deployments won't stay Europe-only.
 
 ---
 
@@ -127,14 +136,22 @@ Site: verity.net
 
 | Criterion | Score /5 | Confidence | One-line justification | Weighted |
 |-----------|----------|------------|------------------------|----------|
-| Field traction (30) | | H / M / L | | |
-| Team / execution (25) | | | | |
-| Technology (20) | | | | |
-| Market (15) | | | | |
-| Timing (10) | | | | |
-| **Total** | | | | **/100** |
+| Field traction (30) | 5 | H | 150+ deployed sites across Europe/NA/Asia; IKEA/Ingka joint communication confirms full-scale live operation ("not a marketing pilot"); DSV publicly reports an 80% end-to-end productivity gain, corroborated by Maersk — customer-verified figures, not vendor marketing claims. | 30 |
+| Team / execution (25) | 5 | H | D'Andrea co-founded Kiva Systems, acquired by Amazon for $775M (now Amazon Robotics) — already shipped warehouse robotics hardware at industrial scale before Verity. Waibel adds a research-to-industry track record (RoboEarth). Strongest team signal of the three companies scored so far. | 25 |
+| Technology (20) | 4 | M | GPS-denied autonomous flight with centimeter-level localization in complete darkness is a hard, field-proven capability; the vision+RFID fusion ("digital twin") with On/Maersk reads as a data advantage that compounds with use, though not confirmed as a hard-to-replicate flywheel — short of a clean 5. | 16 |
+| Market (15) | 5 | H | Existing WMS budget line, quantified pain, live purchases across multiple major accounts (IKEA, DSV, Maersk, UPS, On). No concrete crowding evidence found in research — no discount applied. | 15 |
+| Timing (10) | 3 | M | No specific dateable trigger confirmed — default. The On/Maersk RFID partnership could plausibly reflect a recent component-cost threshold, but this isn't explicitly evidenced, hence M rather than H. | 6 |
+| **Total** | | | | **92/100** |
 
-Notes:
+Notes: Founded 2014 as an ETH Zurich spin-off by D'Andrea (ex-Kiva/Amazon Robotics) and Waibel.
+Three product generations: event/performance drones (Gen 1) → Warehouse IQ vision/RGBD (Gen 2) →
+hybrid vision+RFID digital-twin (Gen 3, with On and Maersk). ~150–180 employees, 100+ in Zurich
+HQ. Deployment-oriented hiring (on-site perception engineers, manufacturing coordinator, B2B GTM
+roles) confirms operational scale-up rather than pure R&D. Won the IERA 2026 award (IFR). Two
+metric discrepancies found across sources (60% vs 40% stockout reduction; 90% vs 80%
+labor/productivity gain) — resolved as vendor "up to" marketing figures vs independently
+client-reported net figures; the client-reported numbers (40%, 80% DSV) are the ones underpinning
+the H confidence on traction.
 
 ---
 
@@ -144,14 +161,20 @@ Site: mimicrobotics.com
 
 | Criterion | Score /5 | Confidence | One-line justification | Weighted |
 |-----------|----------|------------|------------------------|----------|
-| Field traction (30) | | H / M / L | | |
-| Team / execution (25) | | | | |
-| Technology (20) | | | | |
-| Market (15) | | | | |
-| Timing (10) | | | | |
-| **Total** | | | | **/100** |
+| Field traction (30) | 2 | H | Audi partnership (Feb 2026) is dated, sourced, and named — direct evidence, not silence — but the source itself explicitly states pilot-stage integration with no production unit counts. H because the pilot status is documented, not inferred from an absence of information. | 12 |
+| Team / execution (25) | 4 | H | Founders (Nava, Weirich) are pure-research ETH profiles — pedigree alone caps at 3 — but the team has pulled senior talent from Google DeepMind and Tesla Optimus, an independent path to a higher score per the anchor's "...or pulls senior talent from big tech." | 20 |
+| Technology (20) | 4 | M | Mimic Hand M1 (tendon-driven, 15 DoF) paired with the uMimic U1 wearable captures human demonstration data feeding a generative foundation model (FLUX-based) in closed-loop imitation learning — architecturally designed as a compounding data flywheel, but no evidence found that it is proven in production, so capped below a clean 5. | 16 |
+| Market (15) | 2 | L | Single named pilot (Audi, door-sealing task) with no confirmed budget line, no quantified pain, no evidence of repeat purchases. Unnamed "other industry leaders" are unverifiable and excluded from the score. | 6 |
+| Timing (10) | 3 | M | No specific dateable trigger identified — rides the general 2024–26 generative-foundation-model-in-robotics wave. Default score. | 6 |
+| **Total** | | | | **60/100** |
 
-Notes:
+Notes: Founded 2024, ETH Zurich spin-off (Soft Robotics Lab / ETH AI Center). Product: Mimic Hand
+M1 (tendon-driven robotic hand, 15 DoF) + uMimic U1 wearable glove for operator demonstration
+capture, software pivoted toward recent generative foundation models (FLUX-based imitation
+learning). Hiring shows an early field transition (active Field Engineer recruitment in Zurich,
+"install/commission/maintain in real production environments") alongside continued
+embedded-systems and ML roles — still a thin public footprint overall, consistent with the
+company's role in this calibration set (missing-evidence stress test).
 
 ---
 
@@ -161,14 +184,23 @@ Site: gravisrobotics.com
 
 | Criterion | Score /5 | Confidence | One-line justification | Weighted |
 |-----------|----------|------------|------------------------|----------|
-| Field traction (30) | | H / M / L | | |
-| Team / execution (25) | | | | |
-| Technology (20) | | | | |
-| Market (15) | | | | |
-| Timing (10) | | | | |
-| **Total** | | | | **/100** |
+| Field traction (30) | 4 | H | Multiple named clients with real, dated projects (Taylor Woodrow at Manchester Airport — first large-scale autonomous excavation on an active UK airport site; Flannery, $8M/6 units, government-backed; Holcim; Kibag/HD Hyundai in Romandy) plus a direct, dated CEO statement (Aug 2026) confirming sustained unmanned operation in Texas. Repeat named orders and documented autonomous operation push above the anchor-3 range, short of a full 5 given the still-modest confirmed unit count (6 at Flannery). | 24 |
+| Team / execution (25) | 4 | H | Founders ran the ETH HEAP project — a 12-ton autonomous excavator building dry-stone walls — for over a decade before founding Gravis: real physical hardware operated in unstructured conditions, beyond a pure-research profile, though without a prior commercial-scale shipment. Lands between the anchor-3 (credible technical founders) and anchor-5 (shipped hardware at scale before) levels. | 20 |
+| Technology (20) | 5 | H | Gravis Rack validated across 12+ machine brands/models (from compact 10-ton excavators to Caterpillar heavy equipment) without voiding OEM warranties, plus the Slate tablet enabling multi-machine remote supervision with AR overlays — a genuinely hard-to-replicate cross-OEM integration barrier that compounds with each new brand added. | 20 |
+| Market (15) | 5 | H | Roads, utility networks, and data-center construction — three large, budgeted segments. The Flannery project is explicitly backed by a named UK government program (CAM Pathfinder), a directly sourced and dated confirmation of an open budget line. No discount applied — no concrete crowding evidence found. | 15 |
+| Timing (10) | 3 | H | No confirmed dateable external trigger — the CAM Pathfinder program funding, while real and named, wasn't verified as tied to a specific dated mandate or shortage driving urgency now rather than generically. Default score, H confidence since the absence of a specific trigger was actively checked rather than assumed. | 6 |
+| **Total** | | | | **85/100** |
 
-Notes:
+Notes: Founded 2022, ETH Zurich spin-off. $200M Series A led by SoftBank announced Aug 17, 2026 —
+deliberately excluded from the traction score (funding validates investor appetite, not field
+traction). Founders: Ryan Luke Johns (CEO, reinforcement learning / control policies for heavy
+machinery, Guinness World Record for the largest robot-built dry-stone wall) and Dominic Jud
+(CTO, ETH robotics, soil-machine interaction). Product: Gravis Rack (brand-agnostic retrofit kit:
+LiDAR, cameras, ruggedized onboard compute) + Slate tablet (multi-machine remote supervision, AR
+overlay for buried utilities). Commercially active in 7 countries across 4 continents. Hiring
+heavily weighted toward Field Robotics Engineers (Zurich, US, UK — Oxford–London corridor for the
+Flannery project) alongside continued R&D (SLAM, perception, RL) and new fleet-infrastructure
+engineering roles.
 
 ---
 
